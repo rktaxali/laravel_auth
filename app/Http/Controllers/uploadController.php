@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
+
 
 
 
@@ -76,12 +80,42 @@ class uploadController extends Controller
 
     public function userFiles()
     {
-        // Just changed
-        $uploaded_files = DB::table('uploaded_files')
-                ->where('user_id',auth()->user()->id)
+         $user_id = auth()->user()->id;
+         $uploaded_files = DB::table('uploaded_files')
+                ->where('user_id',$user_id)
                 ->select('id', 'original_name','upload_path','mimeType','size','created_at')->get();
        
+        return view('user-files', compact('uploaded_files'));
+    }
+
+    public function deleteFile($id)
+    {
+        // Get storage filename for the passed $id
+        $row = DB::table('uploaded_files')
+                ->where('id',$id)
+                ->select('id', 'upload_path')->get()->first();
         
+        /**
+         * NOTE: There was a problem using File::delete() as well as Storage::delete()
+         *       Also file_exists() fails unless basePath() is used.
+         */
+        $file = app()->basePath(). '/storage/app/'.$row->upload_path;
+
+       if(file_exists($file))
+        {
+            
+            unlink($file);
+            // delete record from the table 
+            DB::table('uploaded_files')->delete($id);
+            return back()
+                 ->with('success','You have successfully delete the file ' );
+        }
+        else
+        {
+            return back()
+                ->with('Error','Error Deleting the file ' );
+        }
+      
     }
 
 }

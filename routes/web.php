@@ -86,4 +86,6 @@ Route::get('/upload',[uploadController::class,'uploadForm'])->name('upload-form'
 Route::post('/upload',[uploadController::class,'uploadFile'])->name('upload.upload-file');
 // Display files uploaded by the user 
 Route::get('/user-files',[uploadController::class,'userFiles'])->name('user-files');
+// Delete a file
+Route::delete('/user-files/{id}/delete',[uploadController::class,'deleteFile'])->name('user-files.deleteFile');
 
