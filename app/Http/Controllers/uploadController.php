@@ -79,7 +79,7 @@ class uploadController extends Controller
         $uploaded_files = DB::table('uploaded_files')
                 ->where('user_id',auth()->user()->id)
                 ->select('id', 'original_name','upload_path','mimeType','size','created_at')->get();
-        dd($uploaded_files);
+       
         
     }
 
