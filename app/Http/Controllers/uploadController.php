@@ -76,6 +76,7 @@ class uploadController extends Controller
 
     public function userFiles()
     {
+        // Just changed
         $uploaded_files = DB::table('uploaded_files')
                 ->where('user_id',auth()->user()->id)
                 ->select('id', 'original_name','upload_path','mimeType','size','created_at')->get();
