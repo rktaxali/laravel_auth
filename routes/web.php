@@ -30,6 +30,7 @@ Auth::routes();   // To make  Auth::middleware available. We still need to use  
 */
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home.post');
 
 // for products table CURD 
 //Route::resource('products', ProductController::class);   // error ProductController not found
