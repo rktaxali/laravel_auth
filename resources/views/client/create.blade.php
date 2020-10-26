@@ -9,6 +9,7 @@
         
              action="{{ route('client.store') }}" method="POST">
             @csrf
+
             <div class="row">
                 <div class="col-4">
                     <div class="form-group ">
@@ -103,8 +104,9 @@
                     </div>
                 </div>
             </div>
-            </div class="row mt-16">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            
+            <div class="row mt-4" >
+                <button type="submit" class="btn btn-primary ml-3">Submit</button>
 
                 <a href="/home"  class="ml-2"><button type="button"  class="btn btn-secondary" >Cancel</button></a>
             </div>

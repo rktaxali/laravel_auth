@@ -2,10 +2,8 @@
 
 @section('content')
 
-
 <div class="container">
     <h3> Edit Client </h3>
-
 
     <form class="border border-secondary rounded p-2" 
         style="max-width:900px;" 
@@ -113,14 +111,7 @@
                 <a href="/client/show/{{ $client->id }}"  class="ml-4"><button type="button"  class="btn btn-secondary" >Cancel</button></a>
         </div>
         
-
     </form>
-
-    
-    
-   
-
-
 
 </div>
 @endsection
