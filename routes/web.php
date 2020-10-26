@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ClientController;
+use App\Http\Controllers\clientController;
 use App\Http\Controllers\uploadController;
 
 /*
@@ -61,13 +61,15 @@ Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store']
 
 
 // For Http (ClientController testing)
-Route::get('/posts',[ClientController::class,'getAllPosts'])->name('posts.getAllPosts');
+// Not Used: Commented 
 /*
+Route::get('/posts',[ClientController::class,'getAllPosts'])->name('posts.getAllPosts');
+
 // name parameter is optional 
 Route::get('/posts/{name?}', function($name='test'){
 	return 'Hi ' . $name;
 });
-*/
+
 // get specific post 
 Route::get('/posts/{id}',[ClientController::class,'getPostById'])->name('posts.getPostById');
 
@@ -81,6 +83,8 @@ Route::get('/posts/{id}/update',[ClientController::class,'updatePostById'])->nam
 
 // delete post. 
 Route::get('/posts/{id}/delete',[ClientController::class,'deletePost'])->name('posts.deletePost');
+*/
+
 
 // Upload a file 
 Route::get('/upload',[uploadController::class,'uploadForm'])->name('upload-form');
@@ -89,4 +93,8 @@ Route::post('/upload',[uploadController::class,'uploadFile'])->name('upload.uplo
 Route::get('/user-files',[uploadController::class,'userFiles'])->name('user-files');
 // Delete a file
 Route::delete('/user-files/{id}/delete',[uploadController::class,'deleteFile'])->name('user-files.deleteFile');
+
+// Routes for Clients 
+Route::get('/client/show/{id}',[clientController::class,'show'])->name('client.show');
+
 

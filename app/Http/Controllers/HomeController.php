@@ -23,7 +23,6 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-       // dd($request);
         $allClients = $request->allClients;
         $searchText = $request->searchText;
 		// Data that will be passed to the home controller 

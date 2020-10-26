@@ -15,11 +15,7 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                    
-                    
-                                        
- 
-
+    
                         <div class="row">
                             <form action="{{ route('home.post') }}" method="POST">
                                 
@@ -91,7 +87,7 @@
                                     @foreach ($clients as $client)
                                         <tr>
                                             <td>{{ $client->id}}</td>
-                                            <td> {{ $client->firstname }} {{ $client->lastname}} </td>
+                                            <td> <a href="/client/show/{{$client->id}}"> {{ $client->firstname }} {{ $client->lastname}} </a>  </td>
                                             <td>{{ $client->city }}</td>
                                             <td >{{ $client->phone }}</td>
                                             
