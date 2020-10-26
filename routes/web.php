@@ -96,5 +96,12 @@ Route::delete('/user-files/{id}/delete',[uploadController::class,'deleteFile'])-
 
 // Routes for Clients 
 Route::get('/client/show/{id}',[clientController::class,'show'])->name('client.show');
+// Create client
+Route::get('/client/create',[clientController::class,'create'])->name('client.create');
+Route::post('/client/create',[clientController::class,'store'])->name('client.store');
+// edit client
+Route::get('/client/edit/{id}', [clientController::class,'edit'])->name('client.edit');
+Route::put('/client/update/{id}', [clientController::class,'update'])->name('client.saupdateve');
+
 
 

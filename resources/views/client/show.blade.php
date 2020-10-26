@@ -4,26 +4,49 @@
 
 
 <div class="container">
-    <h3> Client {{$client->firstname}} {{$client->lastname}}'s Dashboard</h3>
-   <div class="row">
-        <div class="col-2">
-            Address: 
+    <h3> {{$client->firstname}} {{$client->lastname}}'s Dashboard</h3>
+   
+    <div class = "card p-2">
+        <div class="row">
+                <div class="col-2">
+                Name: 
+            </div>
+            <div class="col-6">
+                {{$client->firstname}} {{$client->lastname}} 
+            </div>
         </div>
-        <div class="col-6">
-            {{$client->address}} {{$client->city}} - {{$client->pin}}
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-2">
-            Phone:  
+        <div class="row">
+                <div class="col-2">
+                Address: 
+            </div>
+            <div class="col-6">
+                {{$client->address}}@if($client->city),  {{$client->city}} @endif - {{$client->postalcode}}
+            </div>
         </div>
-        <div class="col-6">
-            {{$client->phone}} 
+
+        <div class="row">
+            <div class="col-2">
+                Phone:  
+            </div>
+            <div class="col-6">
+                {{$client->phone}} 
+            </div>
         </div>
+        <div class="row">
+            <div class="col-2">
+                Email:  
+            </div>
+            <div class="col-6">
+                {{$client->email}} 
+            </div>
+        </div>
+        <div class="row ml-1 mt-2"><a href="/client/edit/{{ $client->id}}"><button class="btn btn-secondary" >Edit</button></a></div>
     </div>
-    <div class="row"></div>
-    <div class="row"><a href="{{ url()->previous() }}">Back to Clients</a></div>
+        
+
+
+    <div class="row"><a href="/home">Back to Clients</a></div>
 
 
     <!-- Notes -->

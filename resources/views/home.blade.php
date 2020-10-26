@@ -67,7 +67,11 @@
                                         </span>
                                 </div>
                             </form>
-                        </div>                        
+                        </div>
+
+                        <div class="row mt-2">
+                        <a href="{{ route('client.create')}}" class="btn btn-secondary">Create New Client</a>
+                        </div>                       
 
                         <div class='mt-4'>
                             @if ( count($clients)  )
@@ -79,8 +83,8 @@
                                 <table class="table table-bordered table-responsive-lg">
                                     <tr>
                                         <th>ID</th>
-                                        <th> Name</th>
-                                        <th>City</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
                                         <th>Phone</th>
                                     </tr>
 
@@ -88,7 +92,7 @@
                                         <tr>
                                             <td>{{ $client->id}}</td>
                                             <td> <a href="/client/show/{{$client->id}}"> {{ $client->firstname }} {{ $client->lastname}} </a>  </td>
-                                            <td>{{ $client->city }}</td>
+                                            <td>{{ $client->address }}, {{ $client->city }}</td>
                                             <td >{{ $client->phone }}</td>
                                             
                                         </tr>

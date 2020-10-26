@@ -13,6 +13,9 @@ class Client extends Model
     use HasFactory;
     protected $table = 'clients';
 
+    //protected $fillable =['firstname','lastname','excerpt'];  // all mass assignment for these fields 
+    protected $guarded = [];  // or don't gaurd any field, allow mass assignment 
+
     // Returns notes for the passed clientID
     public static function getNotes($id)
     {
