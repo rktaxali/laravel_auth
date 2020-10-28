@@ -28,6 +28,7 @@ class clientController extends Controller
         $request->session()->put('client_name',  $client->firstname . ' '. $client->lastname);
      //   $notes =Client::getNotes($id);
         $notes = Note::where('client_id', $id)->orderBy('id', 'desc')->take(2)->get();
+
         return view('client.show', compact('client','notes'));
     }
 
@@ -113,7 +114,7 @@ class clientController extends Controller
         $updated_note = preg_replace("/\r\n|\r|\n/", '<br>', $note);
         
         $prefix = "Created by " . auth()->user()->firstname . ' ' . auth()->user()->lastname . 
-                  ' at ' . date("D M d, Y G:i") . '<br><br>';
+                  ' at ' . date("D M d, Y G:i") . '<br>';
 
 
         $note = new Note(['note'=>$prefix . $updated_note,
@@ -122,9 +123,38 @@ class clientController extends Controller
                  ] );
         $note->save();
         return redirect('/client/notes');
+    }
 
+    public function noteEdit($id )
+    {
+        $client_name =  session()->get('client_name');
+        // save note id in session for use with noteUpdate
+        session()->put('note_id', $id); 
+        $note = Note::where('id', $id)->get()->first();
+        $note->note  = preg_replace( '/<br>/',"\r\n",$note->note);
+        return view('client.noteEdit', compact('client_name','note'));
+    }
 
+    // saves updated note in client_notes table
+    public function noteUpdate(Request $request)
+    {
+        $request->validate(['addNote' => ['required'], ]);
+        $note_id =  session()->get('note_id');
+        $note  =  $request->input('note');
+        $note =  preg_replace("/\r\n|\r|\n/", '<br>', $note);
+
+        $addNote  = $request->input('addNote');
+        $prefix = "<br><br>Updated by " . auth()->user()->firstname . ' ' . auth()->user()->lastname . 
+                  ' at ' . date("D M d, Y G:i") . '<br>';
+        $addNote =  $note.   $prefix . $addNote;
+       
+        // Load Existing Note from table 
+        $noteObject = Note::find($note_id);
+
+        $noteObject->note = $addNote;
+        $noteObject->update_user_id = auth()->user()->id;
+        $noteObject->save();
+        return  redirect( url()->previous());
 
     }
- 
 }

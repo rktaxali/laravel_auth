@@ -20,7 +20,12 @@
                     </thead>
                     @foreach ($notes as $note)
                         <tr>
-                            <td>{!! $note->note !!}</td>
+                            <td>{!! $note->note !!}
+                                <br> 
+                                <a href="/client/noteEdit/{{$note->id}}" class="nav-link">
+                                    <span class="material-icons">edit</span>
+                                </a>
+                            </td>
                             <td>{{ $note->created_at }}</td>
                         </tr>
                     @endforeach

@@ -28,6 +28,8 @@
     </script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous">
     </script>
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"  rel="stylesheet">
 
     <style>
         .footer {
@@ -89,14 +91,11 @@
                         @else
 
                             <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link " href="{{ route('client.create')}}"  role="button" 
-                                    data-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" v-pre>
-                                    Create Client
-                                </a>
-
+                                <a href="{{ route('client.create')}}" class="nav-link">Create New Client</a>
                             </li>
+
+
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" 
                                     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
