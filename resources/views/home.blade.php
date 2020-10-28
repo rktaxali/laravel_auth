@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
@@ -86,6 +86,7 @@
                                         <th>Name</th>
                                         <th>Address</th>
                                         <th>Phone</th>
+                                        <th>Owner</th>
                                     </tr>
 
                                     @foreach ($clients as $client)
@@ -94,6 +95,7 @@
                                             <td> <a href="/client/show/{{$client->id}}"> {{ $client->firstname }} {{ $client->lastname}} </a>  </td>
                                             <td>{{ $client->address }}, {{ $client->city }}</td>
                                             <td >{{ $client->phone }}</td>
+                                            <td >{{ $client->username }}</td>
                                             
                                         </tr>
                                     @endforeach

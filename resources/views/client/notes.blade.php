@@ -22,7 +22,7 @@
                         <tr>
                             <td>{!! $note->note !!}
                                 <br> 
-                                <a href="/client/noteEdit/{{$note->id}}" class="nav-link">
+                                <a href="/client/noteEdit/{{$note->id}}/notes" class="nav-link">
                                     <span class="material-icons">edit</span>
                                 </a>
                             </td>

@@ -45,7 +45,7 @@
             <div class="col-12" >
                 <button type="submit" class="btn btn-primary ml-3">Submit</button>
 
-                <a href="{{ url()->previous() }}"  class="ml-2"><button type="button"  class="btn btn-secondary" >Cancel</button></a>
+                <a href="{{$cancelRoute }}"  class="ml-2"><button type="button"  class="btn btn-secondary" >Cancel</button></a>
             </div>
         </div>
 

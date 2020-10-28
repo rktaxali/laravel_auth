@@ -58,16 +58,20 @@ class User extends Authenticatable
                 ->get(); 
                 */ 
                 
-                $client = DB::select( DB::raw("SELECT * FROM clients WHERE user_id = :id 
-                        AND ( firstname LIKE :firstname
-                              or lastname like :lastname )
-                "), 
-                    [
-                        'id'=> $this->id, 
-                        'firstname'=> '%'.$searchText.'%', 
-                        'lastname'=> '%'.$searchText.'%', 
-                        
-                    ]
+                $client = DB::select( DB::raw("SELECT clients.*,
+                            concat(users.firstname,' ',users.lastname) as username  
+                        FROM clients 
+                        INNER JOIN users ON clients.user_id = users.id
+                        WHERE user_id = :id 
+                        AND ( clients.firstname LIKE :firstname
+                              or clients.lastname like :lastname )
+                        "), 
+                        [
+                            'id'=> $this->id, 
+                            'firstname'=> '%'.$searchText.'%', 
+                            'lastname'=> '%'.$searchText.'%', 
+                            
+                        ]
                     );
                  
 
@@ -75,7 +79,14 @@ class User extends Authenticatable
         }
         else
         {
-            $client =  DB::table("clients")->where("user_id","=",$this->id)->get();  
+             $client = DB::select( DB::raw("SELECT clients.*,
+                                    concat(users.firstname,' ',users.lastname) as username 
+                                FROM clients 
+                                INNER JOIN users ON clients.user_id = users.id
+                                WHERE user_id = :id 
+                                "),
+                                ['id'=> $this->id, ]
+                         );
         }
        
         
@@ -87,20 +98,29 @@ class User extends Authenticatable
     {
         if ( $searchText)
         {
-           /*  
-            $client =  DB::table("clients")
-                ->where('firstname','LIKE', '%'. $searchText .'%')
-                ->get();  
- */
+            $client = DB::select( DB::raw("SELECT clients.*,
+                        concat(users.firstname,' ',users.lastname) as username  
+                        FROM clients 
+                        INNER JOIN users ON clients.user_id = users.id
+                        WHERE ( clients.firstname LIKE :firstname
+                                or clients.lastname like :lastname )
+                        "), 
+                        [
+                            'firstname'=> '%'.$searchText.'%', 
+                            'lastname'=> '%'.$searchText.'%', 
 
-                $client =  DB::table("clients")
-                ->where('firstname','LIKE', '%'. $searchText .'%')
-                ->orWhere('lastname','LIKE', '%'. $searchText .'%')
-                ->get();                  
+                        ]
+                 );                 
         }
         else
         {
-            $client =  DB::table("clients")->get();  
+            //$client =  DB::table("clients")->get(); 
+            // Besides data from the "clients" table, also return client owner name. For that, we will use DB::Raw 
+            $client = DB::select( DB::raw("SELECT clients.*,
+                                concat(users.firstname,' ',users.lastname) as username 
+                            FROM clients 
+                            INNER JOIN users ON clients.user_id = users.id")
+                        );
         }
         return  $client;
     }

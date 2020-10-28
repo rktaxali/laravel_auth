@@ -107,7 +107,7 @@ Route::get('/client/notes',[clientController::class,'notes'])->name('client.note
 Route::get('/client/noteCreate',[clientController::class,'noteCreate'])->name('client.noteCreate');
 Route::post('/client/noteStore',[clientController::class,'noteStore'])->name('client.noteStore');
 // edit and update client note
-Route::get('/client/noteEdit/{id}',[clientController::class,'noteEdit'])->name('client.noteEdit');
+Route::get('/client/noteEdit/{id}/{source}',[clientController::class,'noteEdit'])->name('client.noteEdit');
 Route::post('/client/noteUpdate',[clientController::class,'noteUpdate'])->name('client.noteUpdate');
 
 

@@ -125,14 +125,29 @@ class clientController extends Controller
         return redirect('/client/notes');
     }
 
-    public function noteEdit($id )
+    // $source contains reference to the webpage that called it
+    // This will be used to send the user back to the calling page 
+    // after noteUpdate() or clicking the Cancel button 
+    public function noteEdit($id,$source )
     {
+        if ($source==='show')
+        {
+            $cancelRoute = "/client/show/" . session()->get('client_id');
+            session()->put('noteReturnURL', $cancelRoute);  
+        }
+        elseif ($source==='notes')
+        {
+            $cancelRoute = "/client/notes";
+            session()->put('noteReturnURL', $cancelRoute);  
+        }
+       
         $client_name =  session()->get('client_name');
         // save note id in session for use with noteUpdate
         session()->put('note_id', $id); 
         $note = Note::where('id', $id)->get()->first();
+
         $note->note  = preg_replace( '/<br>/',"\r\n",$note->note);
-        return view('client.noteEdit', compact('client_name','note'));
+        return view('client.noteEdit', compact('client_name','note','cancelRoute'));
     }
 
     // saves updated note in client_notes table
@@ -154,7 +169,7 @@ class clientController extends Controller
         $noteObject->note = $addNote;
         $noteObject->update_user_id = auth()->user()->id;
         $noteObject->save();
-        return  redirect( url()->previous());
+        return  redirect( session()->get('noteReturnURL'));  // created in noteEdit()
 
     }
 }
