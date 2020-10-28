@@ -57,21 +57,26 @@
             <table class="table table-bordered table-responsive-lg">
                 <tr>
                     <th>Note</th>
-                    <th>Created By</th>
-                    <th>Last Update</th>
+                    <th>Created</th>
                 </tr>
 
                 @foreach ($notes as $note)
                     <tr>
-                        <td>{{ $note->note}}</td>
-                        <td>{{ $note->create_username}} at {{ $note->created_at }}</td>
-                        <td > @if($note->update_username) {{ $note->update_username }} at {{ $note->updated_at }} @endif</td>
+                        <td>{!! $note->note !!}</td>
+                        <td>{{ $note->created_at }}</td>
                         
                     </tr>
                 @endforeach
             </table>
+            <div class="row"><a href="{{ route('client.notes') }}">Show All Notes</a></div>
         @else
-                <p>There are No notes for the Client</p>
+                
+                <div class="row">
+                    <div class="col-8">
+                        <p>There are No notes for the Client</p>
+                        <a href="/client/noteCreate">Add a Note</a>
+                    </div>
+                </div>
         @endif
     </div>
 

@@ -102,6 +102,11 @@ Route::post('/client/create',[clientController::class,'store'])->name('client.st
 // edit client
 Route::get('/client/edit/{id}', [clientController::class,'edit'])->name('client.edit');
 Route::put('/client/update/{id}', [clientController::class,'update'])->name('client.saupdateve');
+// Client notes 
+Route::get('/client/notes',[clientController::class,'notes'])->name('client.notes');
+Route::get('/client/noteCreate',[clientController::class,'noteCreate'])->name('client.noteCreate');
+Route::post('/client/noteStore',[clientController::class,'noteStore'])->name('client.noteStore');
+
 
 
 
