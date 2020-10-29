@@ -27,6 +27,36 @@ class Client extends Model
                 ->get();
         return $clientNotes;
     }
+
+
+    /**
+     * Returns details about the current housing for the client
+     */
+    public function getCurrentHousing($id = null)
+    {
+        $id = ! empty($id) ? $id : $this->id;
+        $housing = DB::table("client_housing AS ch")
+                ->leftJoin('housing AS h', 'h.id', '=', 'ch.housing_id')
+                ->where("ch.client_id","=",$id)
+                ->where("ch.allotment_status","=",'Current')
+                ->get()->first();
+        return $housing;
+    }
+
+    /**
+     * Returns details about the All housing(s) for the client
+     */
+    public function getAllHousing($id = null)
+    {
+        $id = ! empty($id) ? $id : $this->id;
+        $housing = DB::table("client_housing AS ch")
+                ->leftJoin('housing AS h', 'h.id', '=', 'ch.housing_id')
+                ->where("ch.client_id","=",$id)
+                ->orderBy('start_date','desc')
+                ->get();
+        return $housing;
+    }
+
    
 
 }

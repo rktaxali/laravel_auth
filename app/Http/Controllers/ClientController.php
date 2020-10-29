@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Note;
+use App\Models\Housing;
 use Illuminate\Http\Request;
 
 class clientController extends Controller
@@ -26,10 +27,18 @@ class clientController extends Controller
         $request->session()->put('client_id', $id);     // save in session variable 
         $client = Client::where('id',$id)->get()->first();
         $request->session()->put('client_name',  $client->firstname . ' '. $client->lastname);
-     //   $notes =Client::getNotes($id);
         $notes = Note::where('client_id', $id)->orderBy('id', 'desc')->take(2)->get();
+        $housing =  $client->getCurrentHousing();
+        if (empty($housing))
+        {
+            $availableHousing = Housing::getAvailableHousing();
+        }
+        else
+        {
+           $availableHousing=[];
+        }
 
-        return view('client.show', compact('client','notes'));
+        return view('client.show', compact('client','notes','housing','availableHousing'));
     }
 
     public function create()
@@ -172,4 +181,26 @@ class clientController extends Controller
         return  redirect( session()->get('noteReturnURL'));  // created in noteEdit()
 
     }
+
+    // Display all housings for the client
+    public function housing()
+    {
+        $client_id = session()->get('client_id');
+        $housings = Client::find($client_id)->getAllHousing();
+        $client_name = session()->get('client_name');
+        return view('client.housing', compact('client_name','housings','client_id'));
+    }
+
+    public function allotHousing(Request $request)
+    {
+        $housing_id = $request->input('housing_id');
+        $client_id = session()->get('client_id');
+        // allot  $housing_id to $client_id;
+        Housing::allocateHousing($housing_id, $client_id);
+        return back()
+            ->with('success','Housing has been allocated to the Cleint');
+    }
+
+
+
 }

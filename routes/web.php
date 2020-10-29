@@ -109,6 +109,12 @@ Route::post('/client/noteStore',[clientController::class,'noteStore'])->name('cl
 // edit and update client note
 Route::get('/client/noteEdit/{id}/{source}',[clientController::class,'noteEdit'])->name('client.noteEdit');
 Route::post('/client/noteUpdate',[clientController::class,'noteUpdate'])->name('client.noteUpdate');
+// Show all client housings
+Route::get('/client/housing', [clientController::class,'housing'])->name('client.housing');
+Route::post('/client/allotHousing', [clientController::class,'allotHousing'])->name('client.allotHousing');
+
+
+
 
 
 
