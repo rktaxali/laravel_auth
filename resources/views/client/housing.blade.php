@@ -33,7 +33,7 @@
             <p>No housing details are available for the Client</p>
             
         <div class="row mt-4">
-            <a href="/client/show/{{$client_id}}">Back to Client</a>
+            h<a href="/client/show/{{$client_id}}">Back to Client</a>
         </div>
     @endif
     
