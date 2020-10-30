@@ -91,7 +91,9 @@
                         @else
 
                             <li class="nav-item dropdown">
-                                <a href="{{ route('client.create')}}" class="nav-link">Create New Client</a>
+                                 @can('Create Client')
+                                    <a href="{{ route('client.create')}}" class="nav-link">Create Client</a>
+                                @endcan
                             </li>
 
 
