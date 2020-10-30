@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\clientController;
 use App\Http\Controllers\uploadController;
+use App\Http\Controllers\PermissionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -113,8 +115,13 @@ Route::post('/client/noteUpdate',[clientController::class,'noteUpdate'])->name('
 Route::get('/client/housing', [clientController::class,'housing'])->name('client.housing');
 Route::post('/client/allotHousing', [clientController::class,'allotHousing'])->name('client.allotHousing');
 
+// Not Authorized Page
+Route::get('/notAuthorized', function(){
+	return view('notAuthorized');
+});
 
-
+// Permissions 
+Route::get('/permission',[PermissionController::class,'index'])->name('permission.index');
 
 
 

@@ -96,13 +96,15 @@
                                 @endcan
                             </li>
 
-
-
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" 
+                                     <li class="nav-item dropdown">
+                                <a  class="nav-link dropdown-toggle"
+                                    id="navbarDropdown"
+                                         href="#" 
                                     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->firstname }}  {{ Auth::user()->lastname }}
                                 </a>
+
+                                
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -111,10 +113,16 @@
                                         {{ __('Logout') }}
                                     </a>
 
+                                    @can('Permission')
+                                        <a class="dropdown-item" href="/permission">User Permissions</a>
+                                    @endcan
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
+
+
                             </li>
                         @endguest
                     </ul>
