@@ -15,7 +15,7 @@ class PermissionController extends Controller
     }
 
     // Displays permissions for all users
-    // We will all the users's list to be filtered by first/last name
+    // TODO: Display users list filtered by first/last name
     public function index(Request $request)
     {
         if(auth()->user()->hasPermissionTo('Permission'))
@@ -25,6 +25,7 @@ class PermissionController extends Controller
             $permissions =  DB::table("permissions")->get();
             foreach ( $permissions  AS  $permission)
             {
+                // for each permission_id, findout users with that permission (available in the model_has_permissions table)
                 $permission_id = $permission->id;
                 $query = "SELECT u.id, if(mp.permission_id,1,0) As has_permission, permissions.name
                     FROM users u
@@ -34,6 +35,8 @@ class PermissionController extends Controller
                     ";
                 $user_permissions   =  $client = DB::select( DB::raw($query));
                 // $user_permissions contains user_ids and has_permission= 1 if user has permission for permissions.name
+                // add the permission_name and permission value (has_permission)
+                // in the $users collection
                 $i=0;
                 foreach ( $user_permissions AS $user_permission)
                 {
@@ -45,9 +48,6 @@ class PermissionController extends Controller
                 
             }
             return view('permissions',compact('users'));
-       
-
-
         }
         else
         {
@@ -56,25 +56,28 @@ class PermissionController extends Controller
    
     }
 
+    // Update user permissions in the model_has_permissions table
     public function store(Request $request)
     {
+        // Create an array containing 'name' as key and id as value 
+         // based on checked permissions submitted from the premission view.
+        // This will be used later to create records in model_has_permissions
         $items = DB::table('permissions')->pluck('id', 'name');
         $permissionArray = [];
         foreach ($items as $name => $id) {
             $permissionArray[$name]  = $id;
         }
-        
 
-        // Clear all permissions from the model_has_permissions and create new permission records 
+        // Clear all permissions from the model_has_permissions except 'Permission' permission
         DB::table('model_has_permissions')->where('permission_id', '<>', 7)->delete();
 
- 
-
+        // For each request input (except '_token'), create a record in model_has_permissions
+        // request input has format like name_userID, e.g. housing_4, create_client_3
+        //  e.g. $key = housing_3 means user.id = 3 has permission for 'housing'
         foreach ($request->all() as $key=>$str)
         {
            if ($key ==='_token')  continue;
-
-            $user_id = substr($key, strrpos($key, "_", -1) + 1);
+            $user_id = substr($key, strrpos($key, "_", -1) + 1);  
             $permission = substr($key, 0,strrpos($key, "_", -1));
             $permission_id = $permissionArray[ $permission];
             
@@ -84,7 +87,6 @@ class PermissionController extends Controller
                  'model_type' => 'App\Models\User'
                  ]
             );
-            
         }
         return  back()
              ->with('success','User permissions have been updated');

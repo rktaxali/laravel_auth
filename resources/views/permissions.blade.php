@@ -8,24 +8,12 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-6">
-            @if ($message = Session::get('success'))
-                    <div class="alert alert-success alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong>{{ $message }}</strong>
-                    </div>
-            @endif
-        </div>
-         
-    </div>
-
- 
     <div class = "row ">
         <div class="col-12 ">
             
             @if ( count($users)  )
-                <form action="{{ route('permission.store') }}" method="POST">
+                <form id="permisisons-form"
+                    action="{{ route('permission.store') }}" method="POST">
                                 @csrf
                         <table class="table table-bordered table-responsive-lg">
                             <tr>
@@ -69,24 +57,46 @@
                         </table>
 
                         <div class="row mt-4" >
-                                <button type="submit" class="btn btn-primary ml-3">Submit</button>
+                                <button
+                                    id="submitButton"
+                                     type="button" 
+                                        onClick="submitForm()"
+                                        class="btn btn-primary ml-3">
+                                    Submit
+                                </button>
 
-                                <a href="/home"  class="ml-4"><button type="button"  class="btn btn-secondary" >Cancel</button></a>
+                                <div id="spinner" class="spinner-border text-primary ml-2" style="visibility:hidden"></div>
+
+                                <a href="/home"  class="ml-4">
+                                    <button type="button" 
+                                            class="btn btn-secondary"  >
+                                        Cancel
+                                    </button>
+                                </a>
                     </div>
-
-
                 </form>
             @endif
-    
-        
+     
         </div>
 
-       
-   
     </div>
-        
-
-
+ 
 </div>
+
 @endsection
+
+
+<script>
+    function submitForm() {
+        // disable Submit button
+        event.preventDefault();
+        var element = document.getElementById("submitButton");
+        element.disabled = true;
+        // display spinner and submit form
+        var element = document.getElementById("spinner");
+        element.style.visibility='visible';
+        document.getElementById('permisisons-form').submit();
+    }
+
+</script>
 

@@ -89,14 +89,19 @@
                                 </li>
                             @endif
                         @else
+                            @can('create_client')
+                                <li class="nav-item dropdown">
+                                    <a href="{{ route('client.create')}}" class="nav-link">Create Client</a>
+                                </li>
+                            @endcan
+
+                            @can('housing')
+                                <li class="nav-item dropdown">
+                                    <a href="{{ route('client.create')}}" class="nav-link">Housing</a>
+                                </li>
+                            @endcan                            
 
                             <li class="nav-item dropdown">
-                                 @can('create_client')
-                                    <a href="{{ route('client.create')}}" class="nav-link">Create Client</a>
-                                @endcan
-                            </li>
-
-                                     <li class="nav-item dropdown">
                                 <a  class="nav-link dropdown-toggle"
                                     id="navbarDropdown"
                                          href="#" 
@@ -135,6 +140,19 @@
         @show
 
         <main class="py-4">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div class="col-6 ml-12">
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-block">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>{{ $message }}</strong>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            
             @yield('content')
         </main>
     </div>

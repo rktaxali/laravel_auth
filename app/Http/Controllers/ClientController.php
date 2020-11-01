@@ -43,7 +43,14 @@ class clientController extends Controller
 
     public function create()
     {
-        return view('client.create');
+        if(auth()->user()->hasPermissionTo('create_client'))
+        {
+             return view('client.create');
+        }
+        else
+        {
+            return view('notAuthorized');
+        }
     }
 
     public function store(Request $request)
