@@ -82,31 +82,32 @@
                             <strong>No Housing Allocated. </strong>
                         </div>
                     </div>
-                    @if(  count($availableHousing) )
-                        <div class="row">
-                            <div class="col-12">
-                                <h5>Housing Available for Allotment</h5>
-                            </div>
-                        </div>
-                        <form action="{{ route('client.allotHousing') }}" method="POST">
-                             @csrf
-
-
-                            @foreach($availableHousing as $housing )
-                                <div class="row mb-3">
-                                    <div class="col-8">
-                                        {{$housing->address}}<br>
-                                        {{$housing->city}} &nbsp;&nbsp;{{$housing->province}} - {{$housing->postalcode}}
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="Submit" name="housing_id"  value="{{$housing->id}}" class="btn btn-secondary">Allot</button>
-                                    </div>
-                                    
+                    @can('housing')
+                        @if(  count($availableHousing) )
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Housing Available for Allotment</h5>
                                 </div>
-                            @endforeach
-                        </form>
-                    @endif
+                            </div>
+                            <form action="{{ route('client.allotHousing') }}" method="POST">
+                                @csrf
 
+
+                                @foreach($availableHousing as $housing )
+                                    <div class="row mb-3">
+                                        <div class="col-8">
+                                            {{$housing->address}}<br>
+                                            {{$housing->city}} &nbsp;&nbsp;{{$housing->province}} - {{$housing->postalcode}}
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="Submit" name="housing_id"  value="{{$housing->id}}" class="btn btn-secondary">Allot</button>
+                                        </div>
+                                        
+                                    </div>
+                                @endforeach
+                            </form>
+                        @endif
+                    @endcan
 
                 @endif
             </div>

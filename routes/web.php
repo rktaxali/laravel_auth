@@ -122,7 +122,7 @@ Route::get('/notAuthorized', function(){
 
 // Permissions 
 Route::get('/permission',[PermissionController::class,'index'])->name('permission.index');
-
+Route::post('/permission',[PermissionController::class,'store'])->name('permission.store');  // update permissions data
 
 
 
