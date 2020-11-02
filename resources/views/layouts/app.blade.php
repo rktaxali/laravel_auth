@@ -97,7 +97,7 @@
 
                             @can('housing')
                                 <li class="nav-item dropdown">
-                                    <a href="{{ route('client.create')}}" class="nav-link">Housing</a>
+                                    <a href="{{ route('housing.index')}}" class="nav-link">Housing</a>
                                 </li>
                             @endcan                            
 

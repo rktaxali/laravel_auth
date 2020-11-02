@@ -44,7 +44,7 @@
                     {{$client->email}} 
                 </div>
             </div>
-            <div class="row ml-1 mt-2"><a href="/client/edit/{{ $client->id}}">
+            <div class="row ml-1 mt-2"><a href="{{  route('client.show',['id'=> $client->id]) }}">
                 <button class="btn btn-secondary" >Edit</button></a>
             </div>
         

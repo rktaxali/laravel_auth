@@ -12,6 +12,19 @@ class Housing extends Model
     use HasFactory;
     protected $table = 'housing';
 
+
+    public static  function getAllHousing()
+    {
+        $query = "SELECT h.id, h.address, h.city, h.postalcode, h.province, h.availability_status, 
+                        ch.client_id , 
+                    CONCAT(c.firstname, ' ', c.lastname) AS client_name, ch.start_date
+                FROM housing h
+                LEFT JOIN client_housing ch  ON ch.housing_id = h.id
+                LEFT JOIN clients c ON ch.client_id = c.id ";
+        return  DB::select( DB::raw($query));  
+    }
+
+
     public static function getAvailableHousing()
     {
         $availableHousing =  DB::table("housing")
@@ -34,6 +47,7 @@ class Housing extends Model
         return $occpiedHousing ;
     }
 
+   
 
     /**
      * Allocate passed $housing_id  to $cleint_id*/  

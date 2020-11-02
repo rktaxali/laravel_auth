@@ -4,53 +4,45 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12">
-            <h2>User Permissions</h2>
+            <h2>Housing</h2>
         </div>
     </div>
 
-   
     <div class = "row ">
         <div class="col-12 ">
             
-            @if ( count($users)  )
-                <form id="permisisons-form"
+            @if ( count($housings)  )
+                <form id="housings-form"
                     action="{{ route('permission.store') }}" method="POST">
                                 @csrf
                         <table class="table table-bordered table-responsive-lg">
                             <tr>
-                                <th>User</th>
-                                <th>Housing</th>
-                                <th>Create Client</th>
-                                <th>Medication</th>
-                                <th>Create User</th>
+                                <th>Address</th>
+                                <th>Availability Status</th>
+                                <th>Client</th>
+                                <th>Start Date</th>
+                                <th>Action</th>
                             </tr>
 
-                            @foreach ($users as $user)
+                            @foreach ($housings as $housing)
                                 <tr>
                                     <td>
-                                        {{ $user->firstname }} {{ $user->lastname }}
+                                        {{ $housing->address }}<br>
+                                        {{ $housing->city }}, {{ $housing->province }} - {{ $housing->postalcode }}
                                     </td>
                                     
                                     <td>
-                                        <input type="checkbox" id="housing_{{$user->id}}" name="housing_{{$user->id}}" 
-                                            @if($user->housing) Checked @endif 
-                                            value="1">       
+                                         {{ $housing->availability_status }}   
                                     </td>
 
                                     <td>
-                                        <input type="checkbox" id="create_client_{{$user->id}}" name="create_client_{{$user->id}}" 
-                                            @if($user->create_client) Checked @endif 
-                                            value="1">       
+                                        {{ $housing->client_name }}
                                     </td>
                                     <td>
-                                        <input type="checkbox" id="medication_{{$user->id}}" name="medication_{{$user->id}}" 
-                                            @if($user->medication) Checked @endif 
-                                            value="1">       
+                                    {{ $housing->start_date }}    
                                     </td>
                                     <td>
-                                        <input type="checkbox" id="create_user_{{$user->id}}" name="create_user_{{$user->id}}" 
-                                            @if($user->create_user) Checked @endif 
-                                            value="1">       
+                                             
                                     </td>
                                     
                                 </tr>
@@ -96,7 +88,7 @@
         // display spinner and submit form
         var element = document.getElementById("spinner");
         element.style.visibility='visible';
-        document.getElementById('permisisons-form').submit();
+        document.getElementById('housings-form').submit();
     }
 
 </script>

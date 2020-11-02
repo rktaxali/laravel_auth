@@ -108,7 +108,7 @@
             <div class="row mt-4" >
                 <button type="submit" class="btn btn-primary ml-3">Submit</button>
 
-                <a href="/home"  class="ml-2"><button type="button"  class="btn btn-secondary" >Cancel</button></a>
+                <a href="{{ route('home') }}"  class="ml-2"><button type="button"  class="btn btn-secondary" >Cancel</button></a>
             </div>
 
         </form>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\clientController;
 use App\Http\Controllers\uploadController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\HousingController;
 
 
 /*
@@ -124,6 +125,8 @@ Route::get('/notAuthorized', function(){
 Route::get('/permission',[PermissionController::class,'index'])->name('permission.index');
 Route::post('/permission',[PermissionController::class,'store'])->name('permission.store');  // update permissions data
 
-
+// Housing 
+Route::get('/housing',[HousingController::class,'index'])->name('housing.index');
+Route::post('/housing',[HousingController::class,'store'])->name('housing.store');  // update permissions data
 
 
