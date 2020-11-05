@@ -148,12 +148,12 @@ class clientController extends Controller
     {
         if ($source==='show')
         {
-            $cancelRoute = "/client/show/" . session()->get('client_id');
+            $cancelRoute = route('client.show',['id'=>session()->get('client_id')]);      //                        "/client/show/" . session()->get('client_id');
             session()->put('noteReturnURL', $cancelRoute);  
         }
         elseif ($source==='notes')
         {
-            $cancelRoute = "/client/notes";
+            $cancelRoute =   route('client.notes');                // "/client/notes";
             session()->put('noteReturnURL', $cancelRoute);  
         }
        

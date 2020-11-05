@@ -75,31 +75,25 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
+                            
                         @else
-                            @can('create_client')
-                                <li class="nav-item dropdown">
-                                    <a href="{{ route('client.create')}}" class="nav-link">Create Client</a>
-                                </li>
-                            @endcan
+                           
+
+                            <li class="nav-item dropdown">
+                                <a href="{{ route('home')}}" class="nav-link">Home</a>
+                            </li>
 
                             @can('housing')
                                 <li class="nav-item dropdown">
                                     <a href="{{ route('housing.index')}}" class="nav-link">Housing</a>
                                 </li>
-                            @endcan                            
+                            @endcan   
+
+                             @can('create_client')
+                                <li class="nav-item dropdown">
+                                    <a href="{{ route('client.create')}}" class="nav-link">Create Client</a>
+                                </li>
+                            @endcan                         
 
                             <li class="nav-item dropdown">
                                 <a  class="nav-link dropdown-toggle"
@@ -119,8 +113,17 @@
                                     </a>
 
                                     @can('Permission')
-                                        <a class="dropdown-item" href="/permission">User Permissions</a>
+                                        <a class="dropdown-item" href="{{ route('permission.index') }}">User Permissions</a>
+
+                                        
                                     @endcan
+
+
+                                    @if (Route::has('register')) 
+                                        @can('Permission')
+                                            <a class="dropdown-item" href="{{ route('register') }}">Create User</a>
+                                        @endcan
+                                    @endif
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf

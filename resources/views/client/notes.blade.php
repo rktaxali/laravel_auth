@@ -22,11 +22,12 @@
                         <tr>
                             <td>{!! $note->note !!}
                                 <br> 
-                                <a href="/client/noteEdit/{{$note->id}}/notes" class="nav-link">
+                                <a  href="{{  route('client.noteEdit', ['id'=>$note->id, 'source'=>'notes']) }}"
+                                     class="nav-link">
                                     <span class="material-icons">edit</span>
                                 </a>
                             </td>
-                            <td>{{ $note->created_at }}</td>
+                            <td>{{ $note->created_at }} mydate</td>
                         </tr>
                     @endforeach
                 </table>
@@ -41,7 +42,8 @@
 
         <div class="row">
             <div class="col-8">
-                <a href="/client/show/{{$client_id}}">Back to Client</a>
+            
+                <a href=" {{ route('client.show',['id'=>$client_id]) }}" >Back to Client</a>
             </div>
         </div>
     
@@ -51,7 +53,7 @@
     @endif
     <div class="row">
             <div class="col-8">
-                 <a href="/client/noteCreate">Add a Note</a>
+                 <a href=" {{ route('client.noteCreate') }}">Add a Note</a>
             </div>
     </div>
 </div>

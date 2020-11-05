@@ -1,5 +1,7 @@
 <?php
 
+
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\clientController;
 use App\Http\Controllers\uploadController;
@@ -128,5 +130,9 @@ Route::post('/permission',[PermissionController::class,'store'])->name('permissi
 // Housing 
 Route::get('/housing',[HousingController::class,'index'])->name('housing.index');
 Route::post('/housing',[HousingController::class,'store'])->name('housing.store');  // update permissions data
+//Route::get('/housing/allot/{id}',[HousingController::class,'allot'])->name('housing.allot');  // selcts a client for housing_id to allot to
+Route::post('/housing/manage',[HousingController::class,'manage'])->name('housing.manage');
+Route::post('/housing/allot/{housing_id}',[HousingController::class,'storeAllotment'])->name('housing.storeAllotment');
+Route::post('/housing/revokeAllotment',[HousingController::class,'revokeAllotment'])->name('housing.revokeAllotment');
 
 

@@ -57,6 +57,24 @@ class Client extends Model
         return $housing;
     }
 
+    // returns clients with status = "active' who don't have housing alloted 
+    public static function clientsWithoutHousing()
+    {
+        $query = " SELECT c.id as client_id, concat(c.firstname, ' ',c.lastname) as client_name
+            FROM clients c
+            WHERE c.`status` = 'Active'
+                AND NOT EXISTS (
+                                SELECT DISTINCT client_id
+                                FROM client_housing ch 
+                                WHERE ch.allotment_status = 'Current'
+                                    AND c.id = ch.client_id
+                            )
+        ";
+
+        return DB::select( DB::raw($query));
+               
+    }
+
    
 
 }

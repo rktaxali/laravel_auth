@@ -82,19 +82,16 @@
                                 @endif
                                 <table class="table table-bordered table-responsive-lg">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th>Phone</th>
-                                        <th>Owner</th>
+                                        <th>Client</th>
+                                        <th>Manager</th>
                                     </tr>
 
                                     @foreach ($clients as $client)
                                         <tr>
-                                            <td>{{ $client->id}}</td>
-                                            <td> <a href=" {{ route('client.show',['id'=>$client->id]) }}"> {{ $client->firstname }} {{ $client->lastname}}  </a>  </td>
-                                            <td>{{ $client->address }}, {{ $client->city }}</td>
-                                            <td >{{ $client->phone }}</td>
+                                            <td> <a href=" {{ route('client.show',['id'=>$client->id]) }}"> {{ $client->firstname }} {{ $client->lastname}}  </a>
+                                                <br>{{ $client->address }}, {{ $client->city }}
+                                                <br>{{ $client->phone }}
+                                              </td>
                                             <td >{{ $client->username }}</td>
                                             
                                         </tr>
