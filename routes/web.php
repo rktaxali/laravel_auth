@@ -7,6 +7,10 @@ use App\Http\Controllers\clientController;
 use App\Http\Controllers\uploadController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\HousingController;
+use App\Http\Controllers\FullCalendarEventMasterController;
+use App\Http\Controllers\CalController;
+
+
 
 
 /*
@@ -136,3 +140,17 @@ Route::post('/housing/allot/{housing_id}',[HousingController::class,'storeAllotm
 Route::post('/housing/revokeAllotment',[HousingController::class,'revokeAllotment'])->name('housing.revokeAllotment');
 
 
+//fullcalender
+Route::get('/cal/{user_id?}',[FullCalendarEventMasterController::class,'index_org']);
+
+Route::get('/calendar',[FullCalendarEventMasterController::class,'index'])->name('calendar');
+Route::post('/calendar/create',[FullCalendarEventMasterController::class,'create']);
+Route::post('/calendar/update',[FullCalendarEventMasterController::class,'update']);
+Route::post('/calendar/delete',[FullCalendarEventMasterController::class,'destroy']);
+
+Route::post('/call/getEvents/{user_id?}',[FullCalendarEventMasterController::class,'getEvents']);
+
+
+Route::get('/helloCalendar/{user_id?}',[CalController::class,'index']);
+
+Route::get('/testCalendar}',[CalController::class,'test']);

@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/helper.js') }}" ></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,6 +22,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	@stack('head')
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
@@ -30,7 +32,8 @@
     </script>
     <!-- Google Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"  rel="stylesheet">
-
+	
+	
     <style>
         .footer {
             position: fixed;
@@ -87,7 +90,11 @@
                                 <li class="nav-item dropdown">
                                     <a href="{{ route('housing.index')}}" class="nav-link">Housing</a>
                                 </li>
-                            @endcan   
+                            @endcan  
+
+                            <li class="nav-item dropdown">
+                                <a href="{{ route('calendar')}}" class="nav-link">Calendar</a>
+                            </li> 
 
                              @can('create_client')
                                 <li class="nav-item dropdown">
@@ -161,3 +168,4 @@
     </div>
 </body>
 </html>
+@yield('footer-scripts') 
