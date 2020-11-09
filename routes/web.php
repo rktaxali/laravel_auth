@@ -144,7 +144,7 @@ Route::post('/housing/revokeAllotment',[HousingController::class,'revokeAllotmen
 Route::get('/cal/{user_id?}',[FullCalendarEventMasterController::class,'index_org']);
 
 Route::get('/calendar',[FullCalendarEventMasterController::class,'index'])->name('calendar');
-Route::post('/calendar/create',[FullCalendarEventMasterController::class,'create']);
+Route::post('/calendar/create',[FullCalendarEventMasterController::class,'create'])->name('calendar.create');
 Route::post('/calendar/update',[FullCalendarEventMasterController::class,'update']);
 Route::post('/calendar/delete',[FullCalendarEventMasterController::class,'destroy']);
 

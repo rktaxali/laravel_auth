@@ -27,7 +27,7 @@ class Client extends Model
                 ->get();
         return $clientNotes;
     }
-
+	
 
     /**
      * Returns details about the current housing for the client

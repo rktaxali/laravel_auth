@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\Client;
 use Redirect,Response;
 use Illuminate\Support\Facades\DB;
 
@@ -32,16 +33,22 @@ class FullCalendarEventMasterController extends Controller
 	 public function index()
     {
 		$user_id = auth()->user()->id ;
-		return view('fullcalendarDates',compact('user_id'));
+		$clients = Client::where('status','=','active')
+			->where('user_id','=',$user_id)
+			->get();
+		return view('fullcalendarDates',compact('user_id','clients'));
     }
     
    
     public function create(Request $request)
-    {  
+    { 
+	
+	
         $insertArr = [ 'title' => $request->title,
                        'start' => $request->start,
                        'end' => $request->end,
-					   'user_id' => auth()->user->id,
+					   'client_id' => $request->client_id,
+					   'user_id' => $request->user_id,
                     ];
 
         $event = Event::insert($insertArr);   
