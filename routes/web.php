@@ -145,8 +145,10 @@ Route::get('/cal/{user_id?}',[FullCalendarEventMasterController::class,'index_or
 
 Route::get('/calendar',[FullCalendarEventMasterController::class,'index'])->name('calendar');
 Route::post('/calendar/create',[FullCalendarEventMasterController::class,'create'])->name('calendar.create');
-Route::post('/calendar/update',[FullCalendarEventMasterController::class,'update']);
+Route::post('/calendar/update',[FullCalendarEventMasterController::class,'update'])->name('calendar.update');
 Route::post('/calendar/delete',[FullCalendarEventMasterController::class,'destroy']);
+Route::post('/calendar/getEvent',[FullCalendarEventMasterController::class,'getEvent'])->name('calendar.getEvent');
+
 
 Route::post('/call/getEvents/{user_id?}',[FullCalendarEventMasterController::class,'getEvents']);
 
