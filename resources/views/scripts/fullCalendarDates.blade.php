@@ -21,7 +21,7 @@
             },
             success: function(response)
 			{
-				console.log(response['events']);
+				//console.log(response['events']);
 				/**
 				* response array returns 'events' and 'status_array'
 				* 'status_array is used to creat the SELECT element for updating status of the event
@@ -53,7 +53,16 @@
 						nextDayThreshold: '00:00:00',
 						
 						
-				
+						/**
+						* To display tooltip for calendar events
+						* Uses event.description as tooltip 
+						* Currently does not work. It may be due to interaction of btootstrap tooltip vs popper.js's tooltip
+						* Based on: https://codepen.io/pen/?&editable=true&editors=001=https%3A%2F%2Ffullcalendar.io%2F
+						* https://fullcalendar.io/docs/event-tooltip-demo
+						**/
+						
+						/*
+						// uncomment popper.js and tooltip.js
 						eventDidMount: function(info) {
 						  var tooltip = new Tooltip(info.el, {
 							title: info.event.extendedProps.description,
@@ -62,7 +71,7 @@
 							container: 'body'
 						  });
 						},
-					
+						*/
 						
 						
 						
@@ -148,7 +157,7 @@
 					let event_date = startDatetime.substr(0, 10);
 					
 					//start.substr(0, 10)
-					
+					$('#client_name').text(event.firstname + ' ' + event.lastname);
 					$('#edit_title').val(event.title);
 					$('#edit_description').val(event.description);
 					$('#edit_event_status').val(event.event_status_id);

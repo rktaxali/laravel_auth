@@ -5,9 +5,14 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link href="{{ asset('css/fullcalendar.css') }}" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
-  	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.1/main.min.js" ></script>
-	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+  	<script src="{{ asset('js/fullcalendar.js') }}" ></script>
+
+	<!-- For calendar tooltip -->
+	<!--
 	<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+	-->
+	
 	
 @endpush
 
@@ -171,9 +176,13 @@
                         
                             action="{{ route('calendar.update') }}" method="POST">
                             @csrf
+							<div class="row">
+                                <div class="col-12">
+									Appointment for <strong><span id="client_name" name="client_name" ></span></strong>
+								</div>
+							</div>
 							
-							<input hidden type='text' id="event_date" name="event_date">
-                            <div class="row">
+                            <div class="row mt-4">
                                 <div class="col-12">
                                     <div class="form-group ">
 									    <!--
@@ -207,6 +216,15 @@
                                     </div>
                                 </div>
                             </div>	
+							
+							<div class="row">
+								<div class="col-4">
+									Appointment Date
+								</div>
+								<div class="col-6">
+									<input readonly type='text' class="form-control  " id="event_date" name="event_date">
+								</div>
+							</div>
 
 							
 							<div class="row">
