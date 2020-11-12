@@ -78,16 +78,28 @@
                         select: function(dateOrObj, endDate) 
                         {
 							addEvent(dateOrObj.startStr);
-                        
-
-
-                        },
+                         },
+						 
+						 
 						
 
                         eventClick: function(info) {
 							getEventDetails( info.event.id);
 						},
 						
+						// Dropping event to a new date 
+						eventDrop: function(info) {
+							
+							let start = info.event.start.toISOString();
+							if (!confirm("Are you sure that you wnat to move the appointment " + info.event.title + ' to ' + start.substring(0, 10))) 
+							{
+							  info.revert();
+							}
+							else
+							{
+								moveEvent(info.event);
+							}
+						},					
 						
 					
 
@@ -182,7 +194,7 @@
   {
         $(".response").css('display','block');
         $(".response").html(""+message+"");
-        setInterval(function() { $(".response").fadeOut(); }, 4000);
+        setInterval(function() { $(".response").fadeOut(); }, 6000);
   }
 
   function addEvent(startDate)
@@ -192,6 +204,9 @@
 		$('#description').val('');
 		$('#title').removeClass('is-invalid');
 		$('#titleErrorMsg').text('');  
+		$('#client_id').removeClass('is-invalid');
+		$('#client_idErrorMsg').text('');  		
+		
 		$('#startDate').val(startDate);
 		$('#starttime').removeClass('is-invalid');
 		$('#endtime').removeClass('is-invalid');
@@ -202,26 +217,14 @@
 		// open modal box 
 		 $('#btnModal').click();
 	}
+	
+	function elementClicked(element)
+	{
+		$('#'+element).removeClass('is-invalid');
+		$('#' +element+ 'ErrorMsg').text('');  
+	}
 
-  function titleClicked()
-  {
-	$('#title').removeClass('is-invalid');
-	$('#titleErrorMsg').text('');  
-  }
   
-  
-  function starttimeClicked()
-  {
-	$('#starttime').removeClass('is-invalid');
-	$('#starttimeErrorMsg').text('');  
-  }
-  
-  
-  function endtimeClicked()
-  {
-	$('#endtime').removeClass('is-invalid');
-	$('#endtimeErrorMsg').text('');  
-  }
   
   
   function createNewEvent()
@@ -238,6 +241,14 @@
 			$('#titleErrorMsg').text('Please Enter Title');
 			dataError = true;
 		}
+		
+		if (! client_id) 
+		{
+			$('#client_id').addClass('is-invalid');
+			$('#client_idErrorMsg').text('Please Select Client');
+			dataError = true;
+		}
+		
 		let starttime =  $('#starttime').val();
 		if (typeof starttime == 'undefined' || ! starttime) 
 		{
@@ -252,14 +263,23 @@
 			$('#endtime').addClass('is-invalid');
 			$('#endtimeErrorMsg').text('Please Enter Appointment End Time');
 			dataError = true;
-		}
-		
-		if (endtime <= starttime)
+		} 
+		else if (endtime <= starttime)
 		{
 			$('#endtime').addClass('is-invalid');
 			$('#endtimeErrorMsg').text('End time must be less than Start time!');
 			dataError = true;
 		}
+		
+		if ($('#frequency').val() && ! $('#enddate').val() )
+		{
+			$('#enddate').addClass('is-invalid');
+			$('#enddateErrorMsg').text('Repeat Appoinatment End date is required');
+			dataError = true;	
+		}
+		
+		
+		
 		
 		if (dataError)  
 		{
@@ -288,14 +308,18 @@
 			
 
 			// Add the event on calendar
+			// However, this will not add the event to the events array, 
+			// therefore, the edit event will not work correctly 
+			// The best option will be to refresh the page and reload events
+			
+			/*
             calendar.addEvent({
                 title: title,
                 start: start,
                 end: end ,
-				
-
                 allDay: false
             })
+			*/
 			
 			// Create the event in the events table 
 			jQuery.ajax({
@@ -304,16 +328,21 @@
 				data: {
 					
 					'title' : title,
+					'startDate' : startDate,
                     'start' : start,
                     'end' : end,
 					'client_id' : client_id,
 					'description' : $('#description').val(),
+					'frequency' : $('#frequency').val(),
+					'enddate' : $('#enddate').val(),
+
+					
 					'user_id': "{{ $user_id}}"
 				},
 				success: function(response){
 					if (response)
 					{
-						displayMessage('Appointment Added Successfully.');
+						displayMessage('Appointment Added Successfully. Pleast reload page to refresh Calendar.');
 					}
 				},
 				error: function(data) {
@@ -381,6 +410,7 @@
 			data: {
 				
 				'title' : title,
+				'startDate' : startDate,
 				'event_status_id' : $('#edit_event_status').val(),
 				'start' : start, 
 				'end' : end,
@@ -398,8 +428,52 @@
 				
 			}
 		});
-                   
-					
+ 
+	}
+	
+	function repeatClicked()
+	{
+		if ($('#frequency').val())
+		{
+			$('#divRepeatEndDate').addClass('d-block').removeClass('d-none');
+		}
+		else
+		{
+			$('#divRepeatEndDate').addClass('d-none').removeClass('d-block');	
+		}
+	}
+	
+	
+	/* Moves event to a new date */
+	function moveEvent(event)
+	{
+		//console.log(event);
+		let event_id = event.id;
+		let start = (event.startStr).substring(0,19);  // 2020-11-20T09:00:00
+		let end =  (event.endStr).substring(0,19);
+		let date = (event.startStr).substring(0,10);
+		// Move the event in the events table 
+		jQuery.ajax({
+			url: "{{ url('/calendar/moveEvent') }}",
+			method: 'post',
+			data: {
+				
+				'event_id' : event_id,
+				'date' : date,
+				'start' : start, 
+				'end' : end,
+			},
+			success: function(response){
+				if (response)
+				{
+					displayMessage('Appointment Moved Successfully.');
+				}
+			},
+			error: function(data) {
+				console.log(data);
+				
+			}
+		});
 		
 		
 	}

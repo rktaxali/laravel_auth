@@ -33,18 +33,78 @@ class FullCalendarEventMasterController extends Controller
 	 public function index()
     {
 		$user_id = auth()->user()->id ;
-		$clients = Client::where('status','=','active')
-			->where('user_id','=',$user_id)
-			->get();
-		return view('fullcalendarDates',compact('user_id','clients'));
+		
+		$query = "SELECT id, firstname, lastname
+				FROM clients
+				WHERE user_id = 2
+				UNION 
+					SELECT null, '--SELECT--',''
+					ORDER BY 2";
+		$clients =  DB::select( DB::raw($query));  
+		$repeatFrequency = [
+								['value'=>'', 'text'=>'None'],
+								['value'=>'Weekly', 'text'=>'Weekly'],
+						//		['value'=>'Monthly', 'text'=>'Monthly'],
+							];
+				
+		return view('fullcalendarDates',compact('user_id','clients','repeatFrequency'));
     }
     
    
+    /**
+	  * Created event record(s)
+	  * If $request->frequency and $request->enddate are passed, create a record in repeat_events and 
+	  *   then create required records in the events table. 
+	  * If  $request->frequency and $request->enddate  are not passed, create a record in the events table 
+	  */
     public function create(Request $request)
     { 
-	
-	
-        $insertArr = [ 'title' => $request->title,
+		if ($request->frequency && $request->enddate)
+		{
+			if (DB::table('repeat_events')->insert( 
+					[
+						'title' => $request->title,
+						'user_id' => $request->user_id,
+						'client_id' => $request->client_id,
+						'frequency' => $request->frequency,
+						'startdate' =>$request->startDate,
+						'enddate' =>$request->enddate
+					]
+				))
+			{
+				$repeat_events_id = DB::getPdo()->lastInsertId();
+				$i=0;
+				
+				$event_start_time = substr($request->start,10);
+				$event_end_time = substr($request->end,10);
+				$event_date = $request->startDate;
+				
+				while ($request->enddate > $event_date)
+				{
+					$start = $event_date . ' ' . $event_start_time;
+					$end = $event_date . ' ' . $event_end_time;
+					
+					
+					$insertArr = [ 'title' => $request->title,
+						'date' =>$event_date,
+						'repeat_events_id' => $repeat_events_id,
+                       'start' => $start,
+                       'end' => $end,
+					   'description'=> $request->description,
+					   'client_id' => $request->client_id,
+					   'user_id' => $request->user_id,
+                    ];
+
+					$event = Event::insert($insertArr);  
+					$event_date =   date ("Y-m-d", strtotime ($event_date ."+7 days"));
+				}
+				
+			}
+		}
+		else
+		{
+			$insertArr = [ 'title' => $request->title,
+						'date' => $request->startDate,
                        'start' => $request->start,
                        'end' => $request->end,
 					   'description'=> $request->description,
@@ -52,7 +112,9 @@ class FullCalendarEventMasterController extends Controller
 					   'user_id' => $request->user_id,
                     ];
 
-        $event = Event::insert($insertArr);   
+			$event = Event::insert($insertArr);   		
+		}
+      
         return Response::json($event);
     }
      
@@ -71,6 +133,22 @@ class FullCalendarEventMasterController extends Controller
  
         return Response::json($event);
     } 
+	
+	
+	public function moveEvent(Request $request)
+	{
+		 $where = array('id' => $request->event_id );
+        $updateArr = [	
+						'start' => $request->start,
+						'end' => $request->end,
+						'date' => $request->date, 
+					];
+        $event  = Event::where($where)->update($updateArr);
+ 
+        return Response::json($event);
+	}
+	
+	
  
  
     public function destroy(Request $request)
