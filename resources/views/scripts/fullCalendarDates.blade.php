@@ -39,7 +39,7 @@
                 var calendarEl = document.getElementById('calendar');
 				
 
-                   
+                    // Using ver FullCalendar v5.3.2
                     calendar = new FullCalendar.Calendar(calendarEl, {
                         headerToolbar: {
 							left: 'prev,next today',
@@ -51,6 +51,7 @@
                         selectable: true,
                         selectMirror: true,
 						nextDayThreshold: '00:00:00',
+					//	defaultView:'dayGridWeek',
 						
 						
 						/**
@@ -159,19 +160,46 @@
 				
 				'event_id' : event_id,
 			},
-			success: function(event){
-				if (event)
+			success: function(data){
+				if (data)
 				{
-					console.log(event);
+					//console.log(data);
+					 let newLine = "\r\n";
+					let event = data['event'];
+					let note = data['note'];
+					let formattedNote = '';
+					
+					if (typeof note == 'object')
+					{
+					
+						// returned note contains array of notes containing created_by and note
+						// create a string to use as val() for the current_note_element 
+						note.forEach(element => formattedNote += element['created_by'] + newLine +element['note'] +newLine + newLine );
+						$('#current_note').val(formattedNote);
+					}
+					if (formattedNote)
+					{
+						$('#divCurrent_note').addClass('d-block').removeClass('d-none');
+					}
+					else
+					{
+						$('#divCurrent_note').addClass('d-none').removeClass('d-block');
+					}
+					
+					
+					
+					// formattedNote =note.replace('<br>',newLine);
 					//return;
 					let startDatetime = event.start;
 					let endDatetime = event.end;
 					let event_date = startDatetime.substr(0, 10);
 					
 					//start.substr(0, 10)
-					$('#client_name').text(event.firstname + ' ' + event.lastname);
+					$('#note').val('');
+					$('#modelEditEventLabel').text('Edit Appointment for ' + event.firstname + ' ' + event.lastname);
 					$('#edit_title').val(event.title);
 					$('#edit_description').val(event.description);
+
 					$('#edit_event_status').val(event.event_status_id);
 					$('#event_date').val(event_date);
 					$('#edit_starttime').val(startDatetime.substr(11,5));
@@ -415,6 +443,7 @@
 				'start' : start, 
 				'end' : end,
 				'description': $('#edit_description').val(),
+				'note' : $('#note').val(),
 			},
 			success: function(response){
 				if (response)

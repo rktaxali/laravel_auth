@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\Note;
 use Redirect,Response;
 use Illuminate\Support\Facades\DB;
 
@@ -119,9 +120,14 @@ class FullCalendarEventMasterController extends Controller
     }
      
  
+	/**
+	  * Update current event
+	  * if $request->note is passed, create a record in the client_notes table
+	  */
     public function update(Request $request)
     {
-        $where = array('id' => session()->get('event_id') );
+		$event_id = session()->get('event_id');
+        $where = array('id' => $event_id );
         $updateArr = [	
 						'title' => $request->title,
 						'start' => $request->start,
@@ -130,6 +136,18 @@ class FullCalendarEventMasterController extends Controller
 						'description' => $request->description
 					];
         $event  = Event::where($where)->update($updateArr);
+		
+		// create client_notes record
+		if ($request->note)
+		{
+			$insertArr = [ 
+						'event_id' => $event_id,
+					   'note'=> $request->note,
+					   'client_id' => session()->get('client_id'),
+					   'create_user_id' => auth()->user()->id,
+                    ];
+			$event = Note::insert($insertArr);   
+		}
  
         return Response::json($event);
     } 
@@ -181,12 +199,24 @@ class FullCalendarEventMasterController extends Controller
 	{
 		//Save event_it in session. We will need this at the time of event_update
 		session()->put('event_id', $request->event_id); 
-		$event = DB::table('events')
+		$event['event'] = DB::table('events')
 			->join('event_status', 'event_status.id', '=', 'events.event_status_id')
 			->join('clients','events.client_id', '=', 'clients.id')
 			->select('events.*','event_status.color', 'event_status.status', 'clients.firstname', 'clients.lastname')
 			->where('events.id','=',$request->event_id)
 			->first();
+		session()->put('client_id', $event['event']->client_id);   // save client_id. Will be used in update()
+		// get current note
+		$query = "
+					SELECT event_id, note, 	 CONCAT(firstname, ' ', lastname, ' at ', c.created_at) AS created_by  
+					FROM client_notes c
+					INNER JOIN `users` u ON c.create_user_id = u.id
+					WHERE c.event_id = " . $request->event_id . "
+					ORDER BY c.id
+				
+				";
+		$event['note'] =  DB::select( DB::raw($query)); 
+		
 		return Response::json($event);
 	}
 

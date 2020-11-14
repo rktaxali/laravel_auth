@@ -17,34 +17,41 @@
                         @endif
     
                         <div class="row">
-                            <form action="{{ route('home.post') }}" method="POST">
-                                
-                                @csrf
-                                
+							<div class="col-5   col-sm-4   col-md-4 col-lg-4">
+								<form action="{{ route('home.post') }}" method="POST">
+									
+									@csrf
+									
 
-                                @if ($allClients)
-                                    <input hidden type="checkbox" name='allClients' id='allClients' >
-                                    <button type="submit" 
-                                        class="btn btn-primary"
-                                        title="Show My Clients" >
-                                        Show My Clients
-                                    </button>
-                                @else
-                                    <input hidden type="checkbox" name='allClients' id='allClients' checked>
-                                    <button type="submit" 
-                                        class="btn btn-primary"
-                                        title="Show My Clients" >
-                                        Show All Clients
-                                    </button>
-                                @endif
-                                
-                            </form>
-
+									@if ($allClients)
+										<input hidden type="checkbox" name='allClients' id='allClients' >
+										<button type="submit" 
+											class="btn btn-primary"
+											title="Show My Clients" >
+											My Clients
+										</button>
+									@else
+										<input hidden type="checkbox" name='allClients' id='allClients' checked>
+										<button type="submit" 
+											class="btn btn-primary"
+											title="Show My Clients" >
+											All Clients
+										</button>
+									@endif
+									
+								</form>
+							</div>
+							
+							<div class="col-6  col-sm-6   col-md-6 col-lg-4">
+								<a href="{{ route('client.create')}}" class="btn btn-secondary"> New Client</a>
+							</div>
+							
                         </div>
 
 
                         <div class="row mt-2">
-                            <form action="{{ route('home.post') }}" method="POST">
+							<div class="col-9">
+								<form action="{{ route('home.post') }}" method="POST">
                                 @csrf
                                 @if ($allClients)
                                     <input hidden type="checkbox" name='allClients' id='allClients'  checked >
@@ -67,11 +74,10 @@
                                         </span>
                                 </div>
                             </form>
-                        </div>
+							</div>
+						</div>
 
-                        <div class="row mt-2">
-                        <a href="{{ route('client.create')}}" class="btn btn-secondary">Create New Client</a>
-                        </div>                       
+                                               
 
                         <div class='mt-4'>
                             @if ( count($clients)  )
