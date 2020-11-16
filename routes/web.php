@@ -149,6 +149,7 @@ Route::post('/calendar/update',[FullCalendarEventMasterController::class,'update
 Route::post('/calendar/delete',[FullCalendarEventMasterController::class,'destroy']);
 Route::post('/calendar/getEvent',[FullCalendarEventMasterController::class,'getEvent'])->name('calendar.getEvent');
 Route::post('/calendar/moveEvent',[FullCalendarEventMasterController::class,'moveEvent'])->name('calendar.moveEvent');
+Route::post('/calendar/getEventStatusCodes',[FullCalendarEventMasterController::class,'getEventStatusCodes'])->name('calendar.getEventStatusCodes');
 
 
 

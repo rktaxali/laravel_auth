@@ -5,6 +5,7 @@ use App\Models\Client;
 use App\Models\Note;
 use App\Models\Housing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class clientController extends Controller
 {
@@ -27,7 +28,27 @@ class clientController extends Controller
         $request->session()->put('client_id', $id);     // save in session variable 
         $client = Client::where('id',$id)->get()->first();
         $request->session()->put('client_name',  $client->firstname . ' '. $client->lastname);
-        $notes = Note::where('client_id', $id)->orderBy('id', 'desc')->take(2)->get();
+		
+		// 
+      //  $notes = Note::where('client_id', $id)->orderBy('id', 'desc')->take(2)->get();
+		$allnotes = $this->getClientNotes($id);
+		
+		// get the first three notes from $allnotes
+		$notes=[];
+		if (count($allnotes) )
+		{
+				if (count($allnotes) <= 2)
+				{
+					$notes=$allnotes;
+				}
+				else
+				{
+					$notes= [$allnotes[0], $allnotes[1]];
+				}
+		}
+		
+		
+		
         $housing =  $client->getCurrentHousing();
         if (empty($housing))
         {
@@ -109,10 +130,81 @@ class clientController extends Controller
     {
         $client_id = $request->session()->get('client_id');
         $client_name = $request->session()->get('client_name');
-        $notes = Note::where('client_id',$client_id)->orderBy('created_at', 'desc')->paginate(3);
+		$notes = $this->getClientNotes($client_id);
+		
+	/*	
+     //   $notes = Note::where('client_id',$client_id)->orderBy('created_at', 'desc')->paginate(3);
+		//        $notes = Note::where('client_id',$client_id)->get()->sortBy('created_at', 'desc');
+			
+		$client_notes = DB::select('select *, "regular_note" as note_type from client_notes where client_id = ? AND event_id IS NULL', [ $client_id]);
+		
+		
+		// get appointment notes
+		$query = "SELECT event_id , e.title, 
+		CONCAT(c.firstname, ' ', c.lastname) AS client_name, 
+		concat(DATE(e.start), ' @ ', Time_format(TIME(e.start),'%H:%i' )) AS appointment_datetime,
+			GROUP_CONCAT(concat(created_by,'<br>',note,'<br>')  SEPARATOR '<br>') as note, max(tmp.created_at) as created_at, 
+					'appointment_note' as note_type
+					FROM events e 
+					INNER JOIN clients c ON e.client_id = c.id
+					INNER JOIN 
+
+					(SELECT event_id , note, 	 CONCAT('Created by ',firstname, ' ', lastname, ' at ',    DATE_FORMAT(c.created_at, '%W %M %d, %Y %T') ) AS created_by,
+								c.created_at
+										FROM client_notes c
+										INNER JOIN `users` u ON c.create_user_id = u.id
+										WHERE c.client_id = ?
+											AND event_id IS NOT NULL
+										ORDER BY c.id
+					)	tmp ON e.id = tmp.event_id
+					GROUP BY event_id,  e.title, client_name, e.start		";		
+		
+		$appt_notes  = 		DB::select($query, [ $client_id]);
+		
+		$notes = array_merge($client_notes, $appt_notes );
+
+		// Now sort $notes array on the created_at column 
+		$created_at = array_column($notes, 'created_at');
+		array_multisort($created_at, SORT_DESC, $notes);
+	*/
         return view('client.notes', compact('client_name','notes','client_id'));
         
     }
+	
+	public function getClientNotes($client_id)
+	{
+		$client_notes = DB::select('select *, "regular_note" as note_type from client_notes where client_id = ? AND event_id IS NULL', [ $client_id]);
+
+		// get appointment notes
+		$query = "SELECT event_id , e.title, 
+		CONCAT(c.firstname, ' ', c.lastname) AS client_name, 
+		concat(DATE(e.start), ' @ ', Time_format(TIME(e.start),'%H:%i' )) AS appointment_datetime,
+			GROUP_CONCAT(concat(created_by,'<br>',note,'<br>')  SEPARATOR '<br>') as note, max(tmp.created_at) as created_at, 
+					'appointment_note' as note_type
+					FROM events e 
+					INNER JOIN clients c ON e.client_id = c.id
+					INNER JOIN 
+
+					(SELECT event_id , note, 	 CONCAT('Created by ',firstname, ' ', lastname, ' at ',    DATE_FORMAT(c.created_at, '%W %M %d, %Y %T') ) AS created_by,
+								c.created_at
+										FROM client_notes c
+										INNER JOIN `users` u ON c.create_user_id = u.id
+										WHERE c.client_id = ?
+											AND event_id IS NOT NULL
+										ORDER BY c.id
+					)	tmp ON e.id = tmp.event_id
+					GROUP BY event_id,  e.title, client_name, e.start		";		
+		
+		$appt_notes  = 		DB::select($query, [ $client_id]);
+		
+		$notes = array_merge($client_notes, $appt_notes );
+
+		// Now sort $notes array on the created_at column 
+		$created_at = array_column($notes, 'created_at');
+		array_multisort($created_at, SORT_DESC, $notes);
+		return $notes;
+
+	}
 
     public function noteCreate(Request $request)
     {

@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+
+@push('head')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ @endpush
+
 @section('content')
 
 <div class="container">
@@ -14,7 +19,6 @@
                     <thead>
                         <tr class="table-success">
                             <th scope="col">Note</th>
-                            <td scope="col">Created</td>
                            
                         </tr>
                     </thead>
@@ -22,24 +26,41 @@
                         <tr>
                             <td>{!! $note->note !!}
                                 <br> 
-                                <a  href="{{  route('client.noteEdit', ['id'=>$note->id, 'source'=>'notes']) }}"
-                                     class="nav-link">
-                                    <span class="material-icons">edit</span>
-                                </a>
+								@if($note->note_type=='regular_note')
+									<a  href="{{  route('client.noteEdit', ['id'=>$note->id, 'source'=>'notes']) }}"
+										 class="nav-link">
+										<span class="material-icons">edit</span>
+									</a>
+								@endif
+								
+								@if($note->note_type=='appointment_note')
+									Appointment on {{$note->appointment_datetime}}  for  {{$note->client_name}} re {{ $note->title}} 
+									<a  onClick="getEventDetails( {{ $note->event_id }} )"
+										 class="nav-link"
+										 
+										 
+										 >
+										<span class="material-icons" style="color:blue; cursor:pointer">edit</span>
+									</a>
+										 
+								@endif
+								
                             </td>
-                            <td>{{ $note->created_at }} mydate</td>
                         </tr>
                     @endforeach
                 </table>
             </div>
         </div>
-
+		<!--
         <div class="row ">
             <div class="col-8">
-                        {{ $notes->links() }}
+                        $notes->links() 
             </div>
-        </div>    
+        </div>   
+        -->		
 
+		@include('components.event_edit_modal')
+		
         <div class="row">
             <div class="col-8">
             
@@ -57,4 +78,9 @@
             </div>
     </div>
 </div>
+
+    @section('footer-scripts')
+        @include('scripts.notes')
+    @endsection
+
 @endsection

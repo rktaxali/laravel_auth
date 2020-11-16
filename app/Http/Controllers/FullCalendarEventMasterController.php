@@ -194,6 +194,17 @@ class FullCalendarEventMasterController extends Controller
 	}
 	
 	
+	// Returns data for creating SELECT Options for Event status codes (Pending, Completed, Cancelled, etc. )
+	public function getEventStatusCodes(Request $requset)
+	{
+		$query = "SELECT id, `status` AS text
+				FROM event_status ORDER BY sortorder";
+		$response =  DB::select( DB::raw($query));  
+
+		return Response::json($response);	
+	}
+	
+	
 	// Returns details for the passed eventID
 	public function getEvent(Request $request)
 	{

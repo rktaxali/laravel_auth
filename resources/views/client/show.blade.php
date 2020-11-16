@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@push('head')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ @endpush
+
+
 @section('content')
 
 
@@ -74,6 +79,8 @@
                     </div>
 
                     <div class="row mt-2"><a href="{{  route('client.housing') }}">Show All Housings</a></div>
+					
+
 
                 @else
                     <div class="row">
@@ -105,7 +112,6 @@
             <table class="table table-bordered table-responsive-lg">
                 <tr>
                     <th>Note</th>
-                    <th>Created</th>
                 </tr>
 
                 @foreach ($notes as $note)
@@ -113,20 +119,30 @@
                         <td>
                             {!! $note->note !!}
                             <br> 
-                            <a href="{{  route('client.noteEdit', ['id'=>$note->id, 'source'=>'show']) }}" class="nav-link">
-                                <span class="material-icons">edit</span>
-                            </a>
-                            
+							@if($note->note_type=='regular_note')
+								<a href="{{  route('client.noteEdit', ['id'=>$note->id, 'source'=>'show']) }}" class="nav-link">
+									<span class="material-icons">edit</span>
+								</a>
+                            @endif
+							
+							@if($note->note_type=='appointment_note')
+									Appointment on {{$note->appointment_datetime}}  for  {{$note->client_name}} re {{ $note->title}} 
+									<a  onClick="getEventDetails( {{ $note->event_id }} )"
+										 class="nav-link" >
+										<span class="material-icons" style="color:blue; cursor:pointer">edit</span>
+									</a>
+										 
+							@endif
                              
                         </td>
                         
-                        <td>
-                            {{ $note->created_at }}  
-                        </td>
+                       
                         
                     </tr>
                 @endforeach
             </table>
+			@include('components.event_edit_modal')
+
             <div class="row"><a href="{{ route('client.notes') }}">Show All Notes</a></div>
         @else
                 
@@ -140,9 +156,13 @@
         @endif
     </div>
 	
-	<p id="para">Last Para </p>
 
     
 
 </div>
+
+@section('footer-scripts')
+        @include('scripts.notes')
+@endsection
+	
 @endsection
