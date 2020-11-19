@@ -105,9 +105,9 @@
     </div>
 
     <!-- Notes -->
-    
-    <div class='row mt-4'>
-        @if ( count($notes)  )
+     @if ( count($notes)  )
+		<div class='row mt-4'>
+ 
            
             <table class="table table-bordered table-responsive-lg">
                 <tr>
@@ -127,39 +127,47 @@
 							
 							@if($note->note_type=='appointment_note')
 									Appointment on {{$note->appointment_datetime}}  for  {{$note->client_name}} re {{ $note->title}} 
-									<a  onClick="getEventDetails( {{ $note->event_id }} )"
-										 class="nav-link" >
-										<span class="material-icons" style="color:blue; cursor:pointer">edit</span>
-									</a>
-										 
+								<a  onClick="getEventDetails( {{ $note->event_id }} )"
+									 class="nav-link" >
+									<span class="material-icons" style="color:blue; cursor:pointer">edit</span>
+								</a>
 							@endif
                              
                         </td>
-                        
-                       
-                        
                     </tr>
                 @endforeach
             </table>
 			@include('components.event_edit_modal')
-
-            <div class="row"><a href="{{ route('client.notes') }}">Show All Notes</a></div>
-        @else
+		</div>	
+			
+		<div class="row">
+			<div class="col-12">
+				<a href="#" onClick="document.getElementById('btnModelCreateEvent').click()"  >Add a Note</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<a href="{{ route('client.notes') }}">Show All Notes</a>
+			</div>
+		</div>
+    @else
                 
-                <div class="row">
-                    <div class="col-12">
-                        <p>There are No notes for the Client</p>
-                        <a href="{{  route('client.noteCreate') }}">
-                            Add a Note</a>
-                    </div>
-                </div>
-        @endif
-    </div>
+		<div class="row">
+			<div class="col-12">
+				<p>There are No notes for the Client</p>
+				<a href="{{  route('client.noteCreate') }}">
+					Add a Note</a>
+			</div>
+		</div>
+    @endif
 	
 
     
 
 </div>
+
+@include('components.event_create_modal')
+
 
 @section('footer-scripts')
         @include('scripts.notes')

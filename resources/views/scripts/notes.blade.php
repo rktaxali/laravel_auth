@@ -197,9 +197,159 @@
 			  
 						
 
+	
+		function elementClicked(element)
+		{
+			$('#'+element).removeClass('is-invalid');
+			$('#' +element+ 'ErrorMsg').text('');  
+		}
 
 
 
+		function repeatClicked()
+		{
+			if ($('#frequency').val())
+			{
+				$('#divRepeatEndDate').addClass('d-block').removeClass('d-none');
+			}
+			else
+			{
+				$('#divRepeatEndDate').addClass('d-none').removeClass('d-block');	
+			}
+		}
+		
+		
+
+	function createNewEvent()
+    {
+		let title = $('#title').val();
+		let eventdate = $('#eventdate').val();
+		
+		let client_id = $('#client_id').val();
+		let eventnote = $('#eventnote').val();
+		let eventType = $('#eventType').val().trim();
+		let dataError = false;
+		
+		
+		if (! title) 
+		{
+			$('#title').addClass('is-invalid');
+			$('#titleErrorMsg').text('Please Enter Title');
+			dataError = true;
+		}
+		
+		if (! eventdate) 
+		{
+			$('#eventdate').addClass('is-invalid');
+			$('#eventdateErrorMsg').text('Please enter Event Date');
+			dataError = true;
+		}
+		
+		if (! eventType) 
+		{
+			$('#eventType').addClass('is-invalid');
+			$('#eventTypeErrorMsg').text('Please Select Event Type');
+			dataError = true;
+		}
+		
+		if (! eventnote) 
+		{
+			$('#eventnote').addClass('is-invalid');
+			$('#eventnoteErrorMsg').text('Please Enter a Note');
+			dataError = true;
+		}		
+		
+		let starttime =  $('#starttime').val();
+		if (typeof starttime == 'undefined' || ! starttime) 
+		{
+			$('#starttime').addClass('is-invalid');
+			$('#starttimeErrorMsg').text('Please Enter Appointment Start Time');
+			dataError = true;
+		}
+		
+		let endtime =  $('#endtime').val();
+		if (typeof endtime == 'undefined' ||  ! endtime) 
+		{
+			$('#endtime').addClass('is-invalid');
+			$('#endtimeErrorMsg').text('Please Enter Appointment End Time');
+			dataError = true;
+		} 
+		else if (endtime <= starttime)
+		{
+			$('#endtime').addClass('is-invalid');
+			$('#endtimeErrorMsg').text('End time must be less than Start time!');
+			dataError = true;
+		}
+		
+		if ($('#frequency').val() && ! $('#enddate').val() )
+		{
+			$('#enddate').addClass('is-invalid');
+			$('#enddateErrorMsg').text('Repeat Appoinatment End date is required');
+			dataError = true;	
+		}
+		
+		
+		
+		
+		if (dataError)  
+		{
+			return;
+		}
+		
+		
+		 hideModal();
+        //console.log(calendar);
+
+        // calendar.currentData.dateSelection.range.start
+        // calendar.currentData.dateSelection.range.end
+        // Fri Nov 20 2020 19:00:00 GMT-0500 (Eastern Standard Time)
+
+      //  let str = "Fri Nov 20 2020 19:00:00 GMT-0500 (Eastern Standard Time)";
+
+       // let title = 'New Event Title';
+       // var title = prompt('Event Title:');
+        if (title) {
+            hideModal();
+			
+			let start = eventdate + ' '+starttime+':00';
+			let end = eventdate  + ' '+endtime+':00';
+			
+			
+			// Create the event in the events table 
+			jQuery.ajax({
+				url: "{{ url('/calendar/create') }}",
+				method: 'post',
+				data: {
+					
+					'title' : title,
+					'startDate' : eventdate,
+                    'start' : start,
+                    'end' : end,
+					'note' : eventnote,
+					'event_type_id' : eventType,
+					'description' : $('#description').val(),
+					'frequency' : $('#frequency').val(),
+					'enddate' : $('#enddate').val(),
+
+					
+				},
+				success: function(response){
+					if (response)
+					{
+						displayMessage('Appointment Added Successfully. Pleast reload page to refresh Calendar.');
+					}
+				},
+				error: function(data) {
+					console.log(data);
+					
+				}
+			});
+                   
+			
+             
+        }
+        calendar.unselect()
+    }		
 
 
 </script>

@@ -47,9 +47,11 @@
 
     </style>
 
-
+	<!-- added for livewire Adds livewire styles-->
+	@livewireStyles
 </head>
 <body>
+	<!-- for livewire -->
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -166,6 +168,8 @@
             @yield('content')
         </main>
     </div>
+	<!-- Added for livewire Adds JS code related to livewire -->
+	@livewireScripts
 </body>
 </html>
 @yield('footer-scripts') 

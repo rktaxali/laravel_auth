@@ -65,8 +65,8 @@ class FullCalendarEventMasterController extends Controller
 			if (DB::table('repeat_events')->insert( 
 					[
 						'title' => $request->title,
-						'user_id' => $request->user_id,
-						'client_id' => $request->client_id,
+						'user_id' => auth()->user()->id,
+						'client_id' => session()->get('client_id'),
 						'frequency' => $request->frequency,
 						'startdate' =>$request->startDate,
 						'enddate' =>$request->enddate
@@ -104,16 +104,34 @@ class FullCalendarEventMasterController extends Controller
 		}
 		else
 		{
+			// if client_id is not passed, take it from session()
+			$client_id =  $request->client_id ?    $request->client_id : session()->get('client_id');
 			$insertArr = [ 'title' => $request->title,
 						'date' => $request->startDate,
                        'start' => $request->start,
                        'end' => $request->end,
+					   'event_type_id'=> $request->event_type_id,
 					   'description'=> $request->description,
-					   'client_id' => $request->client_id,
-					   'user_id' => $request->user_id,
-                    ];
+					   'user_id' => auth()->user()->id,
+						'client_id' => $client_id
+					 ];
 
-			$event = Event::insert($insertArr);   		
+			$event = Event::insert($insertArr); 
+			$event_id = DB::getPdo()->lastInsertId();	
+
+			if ($event_id  && $request->note )
+			{
+				// create a record in the client_notes table
+				$insertArr = [ 
+						'event_id' => $event_id,
+					   'note'=> $request->note,
+					   'client_id' => $client_id,
+					   'create_user_id' => auth()->user()->id,
+                    ];
+				$event = Note::insert($insertArr);   
+			}
+		
+			
 		}
       
         return Response::json($event);

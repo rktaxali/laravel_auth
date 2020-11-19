@@ -39,4 +39,6 @@
         </form>
     
 </div>
+
+@include('components.event_create_modal')
 @endsection

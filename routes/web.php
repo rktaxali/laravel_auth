@@ -8,7 +8,7 @@ use App\Http\Controllers\uploadController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\HousingController;
 use App\Http\Controllers\FullCalendarEventMasterController;
-use App\Http\Controllers\CalController;
+use App\Http\Controllers\ChangePasswordController;
 
 
 
@@ -30,6 +30,9 @@ Route::get('/', function () {
 
 Auth::routes();   // To make  Auth::middleware available. We still need to use  $this->middleware('auth'); in 
 				  // __construct() of the corresponding controller, e.g. HomeController and ProductController
+				  
+Route::get('/changePassword',[ChangePasswordController::class,'index'])->name('changePassword');				  
+				  
 /*				  
  NOTE: To make a middleware applicable to all controller, specifiy this in 
       C:\xampp\htdocs\laravel\laravel_auth\app\Http\Kernel.php's 
@@ -156,6 +159,3 @@ Route::post('/calendar/getEventStatusCodes',[FullCalendarEventMasterController::
 Route::post('/call/getEvents/{user_id?}',[FullCalendarEventMasterController::class,'getEvents']);
 
 
-Route::get('/helloCalendar/{user_id?}',[CalController::class,'index']);
-
-Route::get('/testCalendar}',[CalController::class,'test']);

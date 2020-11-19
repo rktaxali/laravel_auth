@@ -2,7 +2,8 @@
  
 		<!-- Button trigger modal -->
             <button hidden id="btnEditModal" type="button" class="btn btn-primary" 
-					data-toggle="modal" 
+					data-toggle="modal"
+					data-backdrop="static" data-keyboard="false" 
 					data-target="#modelEditEvent">
                 Launch Edit Model (modelEditEvent)
             </button>

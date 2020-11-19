@@ -58,8 +58,15 @@ class clientController extends Controller
         {
            $availableHousing=[];
         }
-
-        return view('client.show', compact('client','notes','housing','availableHousing'));
+		
+		$repeatFrequency = [
+							['value'=>'', 'text'=>'None'],
+							['value'=>'Weekly', 'text'=>'Weekly'],
+					//		['value'=>'Monthly', 'text'=>'Monthly'],
+						];
+	
+	    $eventTypeCodes = $this->getEventTypeCodes();
+        return view('client.show', compact('client','notes','housing','availableHousing','repeatFrequency','eventTypeCodes'));
     }
 
     public function create()
@@ -299,6 +306,17 @@ class clientController extends Controller
         return back()
             ->with('success','Housing has been allocated to the Cleint');
     }
+	
+	public function getEventTypeCodes()
+	{
+		$query = "SELECT id, `type` AS text
+								FROM event_type 
+				UNION 
+					SELECT '', '-- Select --' 
+				ORDER BY 1";
+		return   DB::select( DB::raw($query));  
+
+	}
 
 
 
