@@ -98,6 +98,8 @@ class FullCalendarEventMasterController extends Controller
 						'repeat_events_id' => $repeat_events_id,
                        'start' => $start,
                        'end' => $end,
+					   'event_status_id'=> $request->event_status_id,
+					   'event_type_id'=> $request->event_type_id,
 					   'description'=> $request->description,
 					   'client_id' => $request->client_id,
 					   'user_id' => $request->user_id,

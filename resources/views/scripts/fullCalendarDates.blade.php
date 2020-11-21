@@ -310,81 +310,82 @@
     }
 	
 			
-				function editCalendarEvent()
-					{
-					var title = $('#edit_title').val();
-					let dataError = false;
-					if (! title) 
-					{
-						$('#edit_title').addClass('is-invalid');
-						$('#edit_titleErrorMsg').text('Please Enter Title');
-						dataError = true;
-					}
-					
-					let starttime =  $('#edit_starttime').val();
-					if (typeof starttime == 'undefined' || ! starttime) 
-					{
-						$('#edit_starttime').addClass('is-invalid');
-						$('#edit_starttimeErrorMsg').text('Please Enter Appointment Start Time');
-						dataError = true;
-					}
-					
-					let endtime =  $('#edit_endtime').val();
-					if (typeof endtime == 'undefined' ||  ! endtime) 
-					{
-						$('#edit_endtime').addClass('is-invalid');
-						$('#edit_endtimeErrorMsg').text('Please Enter Appointment End Time');
-						dataError = true;
-					}
-					
-					if (endtime <= starttime)
-					{
-						$('#edit_endtime').addClass('is-invalid');
-						$('#edit_endtimeErrorMsg').text('End time must be less than Start time!');
-						dataError = true;
-					}
-					
-					if (dataError)  
-					{
-						return;
-					}
-					
-					
-					let startDate = $('#event_date').val();
-					let start = startDate + ' '+starttime+':00';
-					let end = startDate  + ' '+endtime+':00';
-					console.log(start, end);
-				
-				
-					// Create the event in the events table 
-					jQuery.ajax({
-						url: "{{ url('/calendar/update') }}",
-						method: 'post',
-						data: {
-							
-							'title' : title,
-							'startDate' : startDate,
-							'event_status_id' : $('#edit_event_status').val(),
-							'start' : start, 
-							'end' : end,
-							'description': $('#edit_description').val(),
-							'note' : $('#note').val(),
-						},
-						success: function(response){
-							if (response)
-							{
-								hideModal();
-								displayMessage('Appointment Update Successfully.');
-							}
-						},
-						error: function(data) {
-							console.log(data);
-							
-						}
-					});
-			 
+			function editCalendarEvent()
+				{
+				var title = $('#edit_title').val();
+				let dataError = false;
+				if (! title) 
+				{
+					$('#edit_title').addClass('is-invalid');
+					$('#edit_titleErrorMsg').text('Please Enter Title');
+					dataError = true;
 				}
+				
+				let starttime =  $('#edit_starttime').val();
+				if (typeof starttime == 'undefined' || ! starttime) 
+				{
+					$('#edit_starttime').addClass('is-invalid');
+					$('#edit_starttimeErrorMsg').text('Please Enter Appointment Start Time');
+					dataError = true;
+				}
+				
+				let endtime =  $('#edit_endtime').val();
+				if (typeof endtime == 'undefined' ||  ! endtime) 
+				{
+					$('#edit_endtime').addClass('is-invalid');
+					$('#edit_endtimeErrorMsg').text('Please Enter Appointment End Time');
+					dataError = true;
+				}
+				
+				if (endtime <= starttime)
+				{
+					$('#edit_endtime').addClass('is-invalid');
+					$('#edit_endtimeErrorMsg').text('End time must be less than Start time!');
+					dataError = true;
+				}
+				
+				if (dataError)  
+				{
+					return;
+				}
+				
+				
+				let startDate = $('#event_date').val();
+				let start = startDate + ' '+starttime+':00';
+				let end = startDate  + ' '+endtime+':00';
+				console.log(start, end);
+			
+			
+				// Create the event in the events table 
+				jQuery.ajax({
+					url: "{{ url('/calendar/update') }}",
+					method: 'post',
+					data: {
 						
+						'title' : title,
+						'startDate' : startDate,
+						'event_status_id' : $('#edit_event_status').val(),
+						'event_type_id' : $('#edit_eventType').val(),
+						'start' : start, 
+						'end' : end,
+						'description': $('#edit_description').val(),
+						'note' : $('#note').val(),
+					},
+					success: function(response){
+						if (response)
+						{
+							hideModal();
+							displayMessage('Appointment Update Successfully.');
+						}
+					},
+					error: function(data) {
+						console.log(data);
+						
+					}
+				});
+		 
+			}
+					
 				
 
 
@@ -464,7 +465,7 @@
 								$('#modelEditEventLabel').text('Edit Appointment for ' + event.firstname + ' ' + event.lastname);
 								$('#edit_title').val(event.title);
 								$('#edit_description').val(event.description);
-
+								$('#edit_eventType').val(event.event_type_id);
 								$('#edit_event_status').val(event.event_status_id);
 								$('#event_date').val(event_date);
 								$('#edit_starttime').val(startDatetime.substr(11,5));
