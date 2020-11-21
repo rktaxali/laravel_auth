@@ -200,7 +200,7 @@
 		else if (endtime <= starttime)
 		{
 			$('#endtime').addClass('is-invalid');
-			$('#endtimeErrorMsg').text('End time must be less than Start time!');
+			$('#endtimeErrorMsg').text('End time must be more than Start time!');
 			dataError = true;
 		}
 		

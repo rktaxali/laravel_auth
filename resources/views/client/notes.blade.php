@@ -9,6 +9,9 @@
 
 <div class="container">
     <h3> Notes Re. {{$client_name}}</h3>
+	
+		<input id="returnURL" value = "\client\notes\" hidden >
+
 
     @if ( count($notes)  )
         <!-- Notes -->
@@ -73,11 +76,21 @@
             <p>There are no notes for the Client</p>
     @endif
     <div class="row">
-            <div class="col-8">
-                 <a href=" {{ route('client.noteCreate') }}">Add a Note</a>
-            </div>
+		<div class="col-8">
+			<!-- Through Modeal window components.event_create_modal -->
+			 <a href="#" onClick="document.getElementById('btnModelCreateEvent').click()"  >Add a Note</a>
+		</div>
     </div>
+	
+	<div>
+	
+	</div>
+	
+	@include('components.event_create_modal')
+
+	
 </div>
+
 
     @section('footer-scripts')
         @include('scripts.notes')

@@ -10,9 +10,26 @@
 
 <!-- Modal Create Event-->
 <div class="modal fade" id="modelCreateEvent" tabindex="-1" role="dialog" aria-labelledby="modelCreateEventLabel" aria-hidden="true">
+
+
 	
 	<div class="modal-dialog" style="max-width:900px;" role="document">
+	
+		
+		
+	
+	
 		<div class="modal-content">
+		
+			<div id="divCreateAlert" style="display:none;">
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+				  <strong>Event Created Successfully...</strong> 
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+			</div>
+		
 			<div class="modal-header">
 				<h5 class="modal-title" id="modelCreateEventLabel">Create Event for {{ $client->firstname }} {{ $client->lastname }}</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -57,7 +74,7 @@
 													onClick="elementClicked('eventType')"
 													style="margin-top:-6px" >
 												@foreach ($eventTypeCodes as $eventTypeCode)
-													 <option value=" {{$eventTypeCode->id }}">{{$eventTypeCode->text }}</option>
+													 <option value="{{$eventTypeCode->id }}">{{$eventTypeCode->text }}</option>
 												@endforeach 
 											</select>
 											<div class="text-danger" id="eventTypeErrorMsg"></div>
@@ -85,7 +102,7 @@
 								</div>	
 								
 								<div class="row">
-									<div id="divEventDate" class="col-sm-6 col-md-4 col-lg-3 ">
+									<div id="divEventDate" class="col-sm-6 col-md-3 col-lg-3 ">
 											<label for="eventdate">Event Date:</label>
 											<input type="date" 
 												class="form-control  " 
@@ -97,7 +114,7 @@
 											<div class="text-danger" id="eventdateErrorMsg"></div>
 									</div>
 									
-									<div class="col-sm-6 col-md-4 col-lg-3">
+									<div class="col-sm-6 col-md-3 col-lg-3">
 										<div class="form-group ">
 											<label for="starttime">Start Time:</label>
 											<input type="time" 
@@ -114,7 +131,7 @@
 										</div>
 									</div>
 									
-									<div class="col-sm-6 col-md-4 col-lg-3">
+									<div class="col-sm-6 col-md-3 col-lg-3">
 										<div class="form-group ">
 											<label for="endtime">End Time:</label>
 											<input type="time" 
@@ -129,7 +146,24 @@
 											<div class="text-danger" id="endtimeErrorMsg"></div>
 													   
 										</div>
-									</div>									
+									</div>
+
+
+									<div class="col-sm-6 col-md-3">
+										<div class="form-group ">
+											<label for="event_status_id">Status:</label>
+											<!-- Options will be populated through JS code when events are fetched -->
+											<select name="event_status_id" id="event_status_id" 
+													class="form-control" 
+													style="margin-top:-6px" >
+												@foreach ($eventStatusCodes as $eventStatusCode)
+													 <option value="{{$eventStatusCode->id }}">{{$eventStatusCode->text }}</option>
+												@endforeach 
+											</select>
+										</div>
+									</div>
+
+									
 					
 								</div>
 						

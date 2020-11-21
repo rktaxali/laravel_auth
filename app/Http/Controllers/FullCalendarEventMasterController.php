@@ -9,6 +9,8 @@ use App\Models\Client;
 use App\Models\Note;
 use Redirect,Response;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\clientController;
+
 
 class FullCalendarEventMasterController extends Controller
 {
@@ -47,8 +49,11 @@ class FullCalendarEventMasterController extends Controller
 								['value'=>'Weekly', 'text'=>'Weekly'],
 						//		['value'=>'Monthly', 'text'=>'Monthly'],
 							];
-				
-		return view('fullcalendarDates',compact('user_id','clients','repeatFrequency'));
+		
+		$eventTypeCodes = clientController::getEventTypeCodes();
+		$eventStatusCodes = clientController::getEventStatusCodes();
+		
+		return view('fullcalendarDates',compact('user_id','clients','repeatFrequency','eventTypeCodes','eventStatusCodes'));
     }
     
    
@@ -110,6 +115,7 @@ class FullCalendarEventMasterController extends Controller
 						'date' => $request->startDate,
                        'start' => $request->start,
                        'end' => $request->end,
+					   'event_status_id'=> $request->event_status_id,
 					   'event_type_id'=> $request->event_type_id,
 					   'description'=> $request->description,
 					   'user_id' => auth()->user()->id,
@@ -128,7 +134,12 @@ class FullCalendarEventMasterController extends Controller
 					   'client_id' => $client_id,
 					   'create_user_id' => auth()->user()->id,
                     ];
-				$event = Note::insert($insertArr);   
+				$note = Note::insert($insertArr); 
+				if ($note)		
+				{
+					$event= [];
+					$event['client_id'] =  $client_id;
+				}
 			}
 		
 			
@@ -166,7 +177,13 @@ class FullCalendarEventMasterController extends Controller
                     ];
 			$event = Note::insert($insertArr);   
 		}
- 
+		
+		if ($event)
+		{	
+			//return client_id 
+			$event=[];
+			$event['client_id'] =  session()->get('client_id');
+		}
         return Response::json($event);
     } 
 	

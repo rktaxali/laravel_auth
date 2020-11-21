@@ -13,8 +13,21 @@
 		
             <!-- Modal Edit Event-->
             <div class="modal fade" id="modelEditEvent" tabindex="-1" role="dialog" aria-labelledby="modelEditEventLabel" aria-hidden="true">
+			
 				<div class="modal-dialog" style="max-width:900px;" role="document">
+				
 					<div class="modal-content">
+					
+					<div id="divEventUpdatedAlert" style="display:none;">
+						<div class="alert alert-success alert-dismissible fade show" role="alert">
+						  <strong>Event Updated Successfully...</strong> 
+						  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						  </button>
+						</div>
+					</div>
+					
+					
 					<div class="modal-header">
 						<h5 class="modal-title" id="modelEditEventLabel">Edit Appointment</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -151,11 +164,13 @@
 											<label for="edit_event_status">Status:</label>
 											<!-- Options will be populated through JS code when events are fetched -->
 											<select name="edit_event_status" id="edit_event_status" class="form-control" style="margin-top:-6px" >
+												@foreach ($eventStatusCodes as $eventStatusCode)
+													 <option value="{{$eventStatusCode->id }}">{{$eventStatusCode->text }}</option>
+												@endforeach 
 											</select>
 										</div>
 									</div>
 								
-									
 								
 								</div>
 

@@ -29,8 +29,10 @@ class clientController extends Controller
         $client = Client::where('id',$id)->get()->first();
         $request->session()->put('client_name',  $client->firstname . ' '. $client->lastname);
 		
-		// 
-      //  $notes = Note::where('client_id', $id)->orderBy('id', 'desc')->take(2)->get();
+		// Save return url route 
+		$request->session()->put('return_url','/client/show'. $id);
+
+		//  $notes = Note::where('client_id', $id)->orderBy('id', 'desc')->take(2)->get();
 		$allnotes = $this->getClientNotes($id);
 		
 		// get the first three notes from $allnotes
@@ -66,7 +68,9 @@ class clientController extends Controller
 						];
 	
 	    $eventTypeCodes = $this->getEventTypeCodes();
-        return view('client.show', compact('client','notes','housing','availableHousing','repeatFrequency','eventTypeCodes'));
+		$eventStatusCodes = $this->getEventStatusCodes();
+		
+        return view('client.show', compact('client','notes','housing','availableHousing','repeatFrequency','eventTypeCodes','eventStatusCodes'));
     }
 
     public function create()
@@ -136,7 +140,10 @@ class clientController extends Controller
     public function notes(Request $request)
     {
         $client_id = $request->session()->get('client_id');
+		$client = Client::where('id',$client_id)->get()->first();
         $client_name = $request->session()->get('client_name');
+		$eventTypeCodes = $this->getEventTypeCodes();
+		$eventStatusCodes = $this->getEventStatusCodes();
 		$notes = $this->getClientNotes($client_id);
 		
 	/*	
@@ -174,13 +181,14 @@ class clientController extends Controller
 		$created_at = array_column($notes, 'created_at');
 		array_multisort($created_at, SORT_DESC, $notes);
 	*/
-        return view('client.notes', compact('client_name','notes','client_id'));
+        return view('client.notes', compact('client','client_name','notes','client_id','eventTypeCodes','eventStatusCodes'));
         
     }
 	
 	public function getClientNotes($client_id)
 	{
-		$client_notes = DB::select('select *, "regular_note" as note_type from client_notes where client_id = ? AND event_id IS NULL', [ $client_id]);
+		// Update $client_notes are not used. 
+		//$client_notes = DB::select('select *, "regular_note" as note_type from client_notes where client_id = ? AND event_id IS NULL', [ $client_id]);
 
 		// get appointment notes
 		$query = "SELECT event_id , e.title, 
@@ -200,16 +208,19 @@ class clientController extends Controller
 											AND event_id IS NOT NULL
 										ORDER BY c.id
 					)	tmp ON e.id = tmp.event_id
-					GROUP BY event_id,  e.title, client_name, e.start		";		
+					GROUP BY event_id,  e.title, client_name, e.start	
+					ORDER BY event_id desc
+					";		
 		
 		$appt_notes  = 		DB::select($query, [ $client_id]);
 		
+		/*
 		$notes = array_merge($client_notes, $appt_notes );
-
 		// Now sort $notes array on the created_at column 
 		$created_at = array_column($notes, 'created_at');
 		array_multisort($created_at, SORT_DESC, $notes);
-		return $notes;
+		*/
+		return $appt_notes;
 
 	}
 
@@ -307,7 +318,7 @@ class clientController extends Controller
             ->with('success','Housing has been allocated to the Cleint');
     }
 	
-	public function getEventTypeCodes()
+	public static function getEventTypeCodes()
 	{
 		$query = "SELECT id, `type` AS text
 								FROM event_type 
@@ -317,7 +328,13 @@ class clientController extends Controller
 		return   DB::select( DB::raw($query));  
 
 	}
-
+	
+	public static function getEventStatusCodes()
+	{
+		$query = "SELECT id, `status` AS text
+				FROM event_status ORDER BY sortorder";
+		return  DB::select( DB::raw($query));  
+	}
 
 
 }

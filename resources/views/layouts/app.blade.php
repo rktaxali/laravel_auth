@@ -47,8 +47,7 @@
 
     </style>
 
-	<!-- added for livewire Adds livewire styles-->
-	@livewireStyles
+	
 </head>
 <body>
 	<!-- for livewire -->
@@ -168,8 +167,7 @@
             @yield('content')
         </main>
     </div>
-	<!-- Added for livewire Adds JS code related to livewire -->
-	@livewireScripts
+
 </body>
 </html>
 @yield('footer-scripts') 

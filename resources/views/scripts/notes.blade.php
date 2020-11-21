@@ -3,39 +3,15 @@
   document.addEventListener('DOMContentLoaded', function() 
   {
 	
-
+		
 		$.ajaxSetup({
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
 			});
 
-
-        jQuery.ajax({
-            url: "{{ url('/calendar/getEventStatusCodes') }}",
-            method: 'post',
-            data: {
-
-            },
-            success: function(response)
-			{
-				// Define Event Status options
-				var $el = $("#edit_event_status");
-				//$el.empty(); // remove old options
-				obj = response;
-				Object.keys(obj).forEach(key => {
-					$el.append($("<option></option>").attr("value", obj[key]['id']).text(obj[key]['text']));
-				});
-				
-	        
-			}
-
-       
-	
-	
-		});
   
-});
+	});
 
 
 
@@ -45,6 +21,7 @@
 	
 				function editCalendarEvent()
 					{
+					$('#divEventUpdatedAlert').hide();
 					var title = $('#edit_title').val();
 					let dataError = false;
 					if (! title) 
@@ -106,8 +83,18 @@
 						success: function(response){
 							if (response)
 							{
-								hideModal();
-								displayMessage('Appointment Update Successfully.');
+								console.log(response);
+								$('#divEventUpdatedAlert').show();
+								 setTimeout(function(){ 
+										let client_id = response['client_id'];
+										let href = $('#returnURL').val();
+										if (href.substring(8,12) =="show")
+										{
+											href = href +  client_id;
+										}
+										window.location.href =href;
+										}, 2000);
+									
 							}
 						},
 						error: function(data) {
@@ -222,6 +209,8 @@
 
 	function createNewEvent()
     {
+		
+		$('#divCreateAlert').hide();
 		let title = $('#title').val();
 		let eventdate = $('#eventdate').val();
 		
@@ -277,7 +266,7 @@
 		else if (endtime <= starttime)
 		{
 			$('#endtime').addClass('is-invalid');
-			$('#endtimeErrorMsg').text('End time must be less than Start time!');
+			$('#endtimeErrorMsg').text('End time must be more than Start time!');
 			dataError = true;
 		}
 		
@@ -297,19 +286,8 @@
 		}
 		
 		
-		 hideModal();
-        //console.log(calendar);
-
-        // calendar.currentData.dateSelection.range.start
-        // calendar.currentData.dateSelection.range.end
-        // Fri Nov 20 2020 19:00:00 GMT-0500 (Eastern Standard Time)
-
-      //  let str = "Fri Nov 20 2020 19:00:00 GMT-0500 (Eastern Standard Time)";
-
-       // let title = 'New Event Title';
-       // var title = prompt('Event Title:');
-        if (title) {
-            hideModal();
+      
+         
 			
 			let start = eventdate + ' '+starttime+':00';
 			let end = eventdate  + ' '+endtime+':00';
@@ -328,6 +306,7 @@
 					'note' : eventnote,
 					'event_type_id' : eventType,
 					'description' : $('#description').val(),
+					'event_status_id' : $('#event_status_id').val(),
 					'frequency' : $('#frequency').val(),
 					'enddate' : $('#enddate').val(),
 
@@ -336,7 +315,29 @@
 				success: function(response){
 					if (response)
 					{
-						displayMessage('Appointment Added Successfully. Pleast reload page to refresh Calendar.');
+						// Clear data in the event_create_modal elements 
+						$('#title').val('');
+						$('#eventdate').val('');
+						$('#client_id').val('');
+						$('#eventnote').val('');
+						$('#eventType').val('');
+						$('#starttime').val('');
+						$('#endtime').val('');
+						$('#event_status_id').val('');
+						$('#divCreateAlert').show();
+						
+						
+						
+						 setTimeout(function(){ 
+								let client_id = response['client_id'];
+								let href = $('#returnURL').val();
+								if (href == "\client\show")
+								{
+									href = href +  client_id;
+								}
+								window.location.href =href;
+								}, 2000);
+						
 					}
 				},
 				error: function(data) {
@@ -347,8 +348,11 @@
                    
 			
              
-        }
-        calendar.unselect()
+		if (typeof calendar !== 'undefined')
+		{
+			 calendar.unselect()
+		}
+       
     }		
 
 

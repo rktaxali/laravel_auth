@@ -10,7 +10,8 @@
 
 <div class="container">
     <h3> {{$client->firstname}} {{$client->lastname}}'s Dashboard</h3>
-   
+	<!-- This will be used as retturn URL after adding/editing an event -->
+	<input id="returnURL" value = "\client\show\" hidden >
     <div class = "row">
         <div class="col-lg-5 col-md-12 border border-secondary rounded p-2 m-2">
             <div class="row">
