@@ -69,8 +69,9 @@ class clientController extends Controller
 	
 	    $eventTypeCodes = $this->getEventTypeCodes();
 		$eventStatusCodes = $this->getEventStatusCodes();
+		$eventTypeCodesWithoutSelect = $this->getEventTypeCodesWithoutSelect(); // excludes --Select-- option
 		
-        return view('client.show', compact('client','notes','housing','availableHousing','repeatFrequency','eventTypeCodes','eventStatusCodes'));
+        return view('client.show', compact('client','notes','housing','availableHousing','repeatFrequency','eventTypeCodes','eventStatusCodes','eventTypeCodesWithoutSelect'));
     }
 
     public function create()
@@ -144,6 +145,8 @@ class clientController extends Controller
         $client_name = $request->session()->get('client_name');
 		$eventTypeCodes = $this->getEventTypeCodes();
 		$eventStatusCodes = $this->getEventStatusCodes();
+		$eventTypeCodesWithoutSelect = $this->getEventTypeCodesWithoutSelect(); // excludes --Select-- option
+
 		$notes = $this->getClientNotes($client_id);
 		
 	/*	
@@ -181,7 +184,7 @@ class clientController extends Controller
 		$created_at = array_column($notes, 'created_at');
 		array_multisort($created_at, SORT_DESC, $notes);
 	*/
-        return view('client.notes', compact('client','client_name','notes','client_id','eventTypeCodes','eventStatusCodes'));
+        return view('client.notes', compact('client','client_name','notes','client_id','eventTypeCodes','eventStatusCodes','eventTypeCodesWithoutSelect'));
         
     }
 	
@@ -324,6 +327,15 @@ class clientController extends Controller
 								FROM event_type 
 				UNION 
 					SELECT '', '-- Select --' 
+				ORDER BY 1";
+		return   DB::select( DB::raw($query));  
+
+	}
+	
+	public static function getEventTypeCodesWithoutSelect()
+	{
+		$query = "SELECT id, `type` AS text
+								FROM event_type 
 				ORDER BY 1";
 		return   DB::select( DB::raw($query));  
 

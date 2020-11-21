@@ -68,7 +68,6 @@
 									<div class="col-sm-6 col-md-4">
 										<div class="form-group ">
 											<label for="eventType">Type:</label>
-											<!-- Options will be populated through JS code when events are fetched -->
 											<select name="eventType" id="eventType" 
 													class="form-control" 
 													onClick="elementClicked('eventType')"

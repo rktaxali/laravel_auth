@@ -83,10 +83,11 @@
 										<label for="current_note">Current Note:</label>
 										<div class="form-group " >
 											<textarea id="current_note" name="current_note" 
+											
 											 class="form-control  " 
 												style="margin-top:-6px"
 												rows="4" 
-							
+												readonly
 												>
 											</textarea>
 												  
@@ -125,7 +126,24 @@
 
 								
 								<div class="row">
-									<div class="col-sm-6 col-md-4">
+								
+									<div class="col-6 col-sm-4 col-md-3">
+										<div class="form-group ">
+											<label for="edit_eventType">Type:</label>
+											<select name="edit_eventType" id="edit_eventType" 
+													class="form-control" 
+													onClick="elementClicked('edit_eventType')"
+													style="margin-top:-6px" >
+												@foreach ($eventTypeCodesWithoutSelect as $eventTypeCode)
+													 <option value="{{$eventTypeCode->id }}">{{$eventTypeCode->text }}</option>
+												@endforeach 
+											</select>
+											
+										</div>
+									</div>
+								
+								
+									<div class="col-6 col-sm-4 col-md-3">
 										<div class="form-group ">
 											<label for="starttime">Start Time:</label>
 											<input type="time" 
@@ -142,7 +160,7 @@
 										</div>
 									</div>
 									
-									<div class="col-sm-6 col-md-4">
+									<div class="col-6 col-sm-4 col-md-3">
 										<div class="form-group ">
 											<label for="endtime">End Time:</label>
 											<input type="time" 
@@ -159,7 +177,7 @@
 										</div>
 									</div>
 									
-									<div class="col-sm-6 col-md-4">
+									<div class="col-6 col-sm-4 col-md-3">
 										<div class="form-group ">
 											<label for="edit_event_status">Status:</label>
 											<!-- Options will be populated through JS code when events are fetched -->

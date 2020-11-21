@@ -139,12 +139,15 @@
 		$('#titleErrorMsg').text('');  
 		$('#client_id').removeClass('is-invalid');
 		$('#client_idErrorMsg').text('');  		
+		$('#eventType').removeClass('is-invalid');
+		$('#eventTypeErrorMsg').text(''); 
 		
 		$('#startDate').val(startDate);
 		$('#starttime').removeClass('is-invalid');
 		$('#endtime').removeClass('is-invalid');
 		$('#starttimeErrorMsg').text('');  
 		$('#endtimeErrorMsg').text('');  
+
 		
 		
 		// open modal box 
@@ -165,6 +168,8 @@
 		var user_id = "{{ $user_id}}"
 		var title = $('#title').val();
 		let client_id = $('#client_id').val();
+		let eventType = $('#eventType').val().trim();
+
 		let dataError = false;
 		
 		
@@ -172,6 +177,13 @@
 		{
 			$('#title').addClass('is-invalid');
 			$('#titleErrorMsg').text('Please Enter Title');
+			dataError = true;
+		}
+	
+		if (! eventType) 
+		{
+			$('#eventType').addClass('is-invalid');
+			$('#eventTypeErrorMsg').text('Please Select Event Type');
 			dataError = true;
 		}
 		
@@ -259,23 +271,30 @@
 				url: "{{ url('/calendar/create') }}",
 				method: 'post',
 				data: {
-					
+					"_token": "{{ csrf_token() }}",
 					'title' : title,
 					'startDate' : startDate,
+					'event_status_id' : 1,   // By default, all events are pending
+					'event_type_id' : eventType,
                     'start' : start,
                     'end' : end,
 					'client_id' : client_id,
 					'description' : $('#description').val(),
 					'frequency' : $('#frequency').val(),
 					'enddate' : $('#enddate').val(),
-
-					
 					'user_id': "{{ $user_id}}"
+					
+					
+					
+					
 				},
 				success: function(response){
 					if (response)
 					{
-						displayMessage('Appointment Added Successfully. Pleast reload page to refresh Calendar.');
+						displayMessage('Appointment Added Successfully. The Calendar will be refresed...');
+						setTimeout(function(){ 
+								window.location.href ="/calendar";
+										}, 500);
 					}
 				},
 				error: function(data) {

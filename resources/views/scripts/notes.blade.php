@@ -75,6 +75,7 @@
 							'title' : title,
 							'startDate' : startDate,
 							'event_status_id' : $('#edit_event_status').val(),
+							'event_type_id' : $('#edit_eventType').val(),
 							'start' : start, 
 							'end' : end,
 							'description': $('#edit_description').val(),
@@ -87,13 +88,13 @@
 								$('#divEventUpdatedAlert').show();
 								 setTimeout(function(){ 
 										let client_id = response['client_id'];
-										let href = $('#returnURL').val();
+										href = $('#returnURL').val();
 										if (href.substring(8,12) =="show")
 										{
 											href = href +  client_id;
 										}
 										window.location.href =href;
-										}, 2000);
+										}, 500);
 									
 							}
 						},
@@ -165,6 +166,8 @@
 								$('#modelEditEventLabel').text('Edit Appointment for ' + event.firstname + ' ' + event.lastname);
 								$('#edit_title').val(event.title);
 								$('#edit_description').val(event.description);
+								$('#edit_eventType').val(event.event_type_id);
+								
 
 								$('#edit_event_status').val(event.event_status_id);
 								$('#event_date').val(event_date);
@@ -326,17 +329,19 @@
 						$('#event_status_id').val('');
 						$('#divCreateAlert').show();
 						
-						
-						
-						 setTimeout(function(){ 
+							
+						setTimeout(function()
+							{ 
 								let client_id = response['client_id'];
-								let href = $('#returnURL').val();
-								if (href == "\client\show")
+								href = $('#returnURL').val();
+								if (href.substring(8,12) =="show")
 								{
 									href = href +  client_id;
 								}
+								console.log(href);
 								window.location.href =href;
-								}, 2000);
+							}, 500);
+									
 						
 					}
 				},

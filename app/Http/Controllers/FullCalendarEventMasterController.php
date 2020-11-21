@@ -52,8 +52,10 @@ class FullCalendarEventMasterController extends Controller
 		
 		$eventTypeCodes = clientController::getEventTypeCodes();
 		$eventStatusCodes = clientController::getEventStatusCodes();
+		$eventTypeCodesWithoutSelect = clientController::getEventTypeCodesWithoutSelect(); // excludes --Select-- option
+
 		
-		return view('fullcalendarDates',compact('user_id','clients','repeatFrequency','eventTypeCodes','eventStatusCodes'));
+		return view('fullcalendarDates',compact('user_id','clients','repeatFrequency','eventTypeCodes','eventStatusCodes','eventTypeCodesWithoutSelect'));
     }
     
    
@@ -161,6 +163,7 @@ class FullCalendarEventMasterController extends Controller
 						'title' => $request->title,
 						'start' => $request->start,
 						'end' => $request->end,
+						'event_type_id' => $request->event_type_id, 
 						'event_status_id' => $request->event_status_id, 
 						'description' => $request->description
 					];

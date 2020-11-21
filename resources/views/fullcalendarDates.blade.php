@@ -78,7 +78,9 @@
 															  
 													</div>
 												</div>
-											</div>							
+											</div>	
+
+																				
 											
 											@if ($clients)
 												<div class="row">
@@ -103,7 +105,24 @@
 											@endif	
 
 											<div class="row">
-												<div class="col-sm-6 col-md-4 col-lg-3">
+											
+											<div class="col-6 col-sm-4 col-md-3">
+													<div class="form-group ">
+														<label for="eventType">Type:</label>
+														<select name="eventType" id="eventType" 
+																class="form-control" 
+																onClick="elementClicked('eventType')"
+																style="margin-top:-6px" >
+															@foreach ($eventTypeCodes as $eventTypeCode)
+																 <option value="{{$eventTypeCode->id }}">{{$eventTypeCode->text }}</option>
+															@endforeach 
+														</select>
+														<div class="text-danger" id="eventTypeErrorMsg"></div>
+													</div>
+												</div>
+											
+											
+												<div class="col-6 col-sm-4 col-md-3 col-lg-3">
 													<div class="form-group ">
 														<label for="starttime">Start Time:</label>
 														<input type="time" 
@@ -120,7 +139,7 @@
 													</div>
 												</div>
 												
-												<div class="col-sm-6 col-md-4 col-lg-3">
+												<div class="col-6 col-sm-4 col-md-3 col-lg-3">
 													<div class="form-group ">
 														<label for="endtime">End Time:</label>
 														<input type="time" 

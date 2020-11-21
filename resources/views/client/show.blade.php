@@ -156,8 +156,7 @@
 		<div class="row">
 			<div class="col-12">
 				<p>There are No notes for the Client</p>
-				<a href="{{  route('client.noteCreate') }}">
-					Add a Note</a>
+				<a href="#" onClick="document.getElementById('btnModelCreateEvent').click()"  >Add a Note</a>
 			</div>
 		</div>
     @endif
