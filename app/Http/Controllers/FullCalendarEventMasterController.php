@@ -18,6 +18,7 @@ class FullCalendarEventMasterController extends Controller
 	public function __construct()
     {
         $this->middleware('auth');
+		date_default_timezone_set("America/Toronto");
     }
 	
   
@@ -102,6 +103,8 @@ class FullCalendarEventMasterController extends Controller
 					   'event_type_id'=> $request->event_type_id,
 					   'description'=> $request->description,
 					   'client_id' => $request->client_id,
+					    'created_at' => date('Y-m-d H:i:s'),
+						 'updated_at' => date('Y-m-d H:i:s'),
 					   'user_id' => $request->user_id,
                     ];
 
@@ -123,6 +126,9 @@ class FullCalendarEventMasterController extends Controller
 					   'event_type_id'=> $request->event_type_id,
 					   'description'=> $request->description,
 					   'user_id' => auth()->user()->id,
+					   'created_at' => date('Y-m-d H:i:s'),
+ 						 'updated_at' => date('Y-m-d H:i:s'),
+
 						'client_id' => $client_id
 					 ];
 
@@ -136,6 +142,8 @@ class FullCalendarEventMasterController extends Controller
 						'event_id' => $event_id,
 					   'note'=> $request->note,
 					   'client_id' => $client_id,
+					    'created_at' => date('Y-m-d H:i:s'),
+ 						 'updated_at' => date('Y-m-d H:i:s'),
 					   'create_user_id' => auth()->user()->id,
                     ];
 				$note = Note::insert($insertArr); 
@@ -179,6 +187,8 @@ class FullCalendarEventMasterController extends Controller
 					   'note'=> $request->note,
 					   'client_id' => session()->get('client_id'),
 					   'create_user_id' => auth()->user()->id,
+					     'created_at' => date('Y-m-d H:i:s'),
+ 						 'updated_at' => date('Y-m-d H:i:s')
                     ];
 			$event = Note::insert($insertArr);   
 		}

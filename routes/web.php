@@ -9,6 +9,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\HousingController;
 use App\Http\Controllers\FullCalendarEventMasterController;
 use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\TaskController;
 
 
 
@@ -159,3 +160,4 @@ Route::post('/calendar/getEventStatusCodes',[FullCalendarEventMasterController::
 Route::post('/call/getEvents/{user_id?}',[FullCalendarEventMasterController::class,'getEvents']);
 
 
+Route::get('/task/create',[TaskController::class,'create'])->name('task.create');

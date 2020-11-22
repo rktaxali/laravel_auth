@@ -12,7 +12,11 @@ class clientController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+      
+	   
+		$this->middleware('auth');
+		 $query = "SET time_zone = '-8:00'";
+	   DB::select( DB::raw($query));  
     }
 
     // Dashboard. User passes an client.id 
